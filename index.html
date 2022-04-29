@@ -165,6 +165,156 @@
 
 <div class="post">
 
+    <a href="/2022/04/29/Render/API_Primary/">
+        <h2>
+            常用的API_初级
+        </h2>
+    </a>
+
+    <div class="category-and-date">
+
+        
+        <span class="category">
+            <a href="/categories/shader入门学习笔记">
+                <span class="icon">
+                    <a-icon type="book" theme="filled" /></span>
+                shader入门学习笔记
+            </a>
+        </span>
+        
+
+        <span class="date">
+            <span class="icon">
+                <a-icon type="calendar" theme="filled" />
+            </span>
+            2022/4/29
+        </span>
+
+    </div>
+
+    <div class="excerpt">
+        <div class="content" v-pre>
+            
+            
+            <h3 id="Properties-属性"><a href="#Properties-属性" class="headerlink" title="Properties 属性"></a>Properties 属性</h3><pre><code class="shader">Properties
+&#123;
+    // 颜色值
+    _MyColor(&quot;MyColor&quot;,Color) = (1,1,1,1)
+&#125;
+</code></pre>
+<h3 id="语义"><a href="#语义" class="headerlink" title="语义"></a>语义</h3><pre><code class="shader">struct appData
+&#123;
+    // （模型空间）顶点位置
+    float4 vertex : POSITION;
+    // （模型空间）顶点法线
+    float3 normal : NORMAL;
+&#125;;
+
+struct v2f
+&#123;
+    // Fragment 所需要的（裁剪空间）顶点位置
+    float4 pos : SV_POSITION;
+&#125;;
+
+Fragment 的返回值为 fixed4 : SV_Target
+意为输出颜色
+</code></pre>
+<h3 id="mul操作"><a href="#mul操作" class="headerlink" title="mul操作"></a>mul操作</h3><p><img src="/2022/04/29/Render/API_Primary/mul.png" alt="img"></p>
+<center>HLSL文档</center>
+
+
+<pre><code class="shader">mul(x,y) 
+找到了个HLSL中的API说明（上图）
+1：当x为向量时，x将转换为行向量
+2：当y为向量时，y将转换为列向量
+
+但是上面两条不太好理解，甚至感觉不太符合逻辑
+所以，以下是我对UnityShader中mul函数的理解
+
+当做空间转换操作时，是以向量左乘矩阵的形式进行的
+所以当写作 mul(Matrix, Vector) 形式比较符合直观感觉
+而当写作 mul(Vector, Matrix) 时，实际上（我猜的）是做了mul(Matrix.Inverse, Vector)
+</code></pre>
+<h3 id="MVP操作"><a href="#MVP操作" class="headerlink" title="MVP操作"></a>MVP操作</h3><pre><code class="shader">UnityObjectToClipPos(float4 objPos)
+
+// 来源
+=&gt; UnityCG.cginc
+==&gt; UnityShaderUtilities.cginc
+</code></pre>
+<h3 id="object-lt-互相转换-gt-world"><a href="#object-lt-互相转换-gt-world" class="headerlink" title="object &lt;互相转换&gt; world"></a>object &lt;互相转换&gt; world</h3><pre><code class="shader">// object =&gt; world
+mul(unity_ObjectToWorld, objPos)
+or
+mul(objPos, unity_WorldToObject)
+
+// world =&gt; object
+mul(unity_WorldToObject, worldPos)
+or
+mul(worldPos, unity_ObjectToWorld)
+
+// unity_ObjectToWorld 和 unity_WorldToObject 的来源
+=&gt; UnityCG.cginc
+==&gt; UnityShaderVariables.cginc
+</code></pre>
+<h3 id="Ambient-环境光-颜色"><a href="#Ambient-环境光-颜色" class="headerlink" title="Ambient 环境光 颜色"></a>Ambient 环境光 颜色</h3><pre><code class="shader">UNITY_LIGHTMODEL_AMBIENT.rgb
+
+// 来源
+=&gt; UnityCG.cginc
+==&gt; UnityShaderVariables.cginc
+</code></pre>
+<h3 id="光源方向-（只有一个光源且为平行光时）"><a href="#光源方向-（只有一个光源且为平行光时）" class="headerlink" title="光源方向 （只有一个光源且为平行光时）"></a>光源方向 （只有一个光源且为平行光时）</h3><pre><code class="shader">_WorldSpaceLightPos0.xyz
+
+// 来源
+=&gt; UnityCG.cginc
+==&gt; UnityShaderVariables.cginc
+</code></pre>
+<h3 id="光源颜色"><a href="#光源颜色" class="headerlink" title="光源颜色"></a>光源颜色</h3><pre><code class="shader">_LightColor0.rgb
+
+// 来源
+=&gt; Lighting.cginc
+==&gt; UnityLightingCommon.cginc
+
+// 注释
+为了得到正确的 _LightColor0
+还需要设置正确的 LightMode 代码举例如下:
+Tags &#123; &quot;LightMode&quot; = &quot;ForwardBase&quot; &#125;
+</code></pre>
+<h3 id="dot-向量点乘"><a href="#dot-向量点乘" class="headerlink" title="dot 向量点乘"></a>dot 向量点乘</h3><pre><code class="shader">dot(vector_A, vector_B)
+
+返回vector_A·vector_B的结果
+</code></pre>
+<h3 id="saturate"><a href="#saturate" class="headerlink" title="saturate"></a>saturate</h3><pre><code class="shader">saturate(float_X)
+
+将 float_X 限定在 0~1 之间，并返回
+类似于UnityEngine.Mathf.Clamp01函数
+</code></pre>
+
+            
+        </div>
+    </div>
+
+    <div class="post-tags">
+        
+        <span class="icon">
+            <a-icon type="tags" theme="filled" />
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/渲染" style=color:#6484be>
+                渲染
+            </a>
+        </span>
+        
+    </div>
+
+    <a href="/2022/04/29/Render/API_Primary/ " class="go-post">
+        阅读全文
+    </a>
+</div>
+
+<div class="post">
+
     <a href="/2022/03/27/hello-world/">
         <h2>
             Hello World
@@ -173,14 +323,6 @@
 
     <div class="category-and-date">
 
-        
-        <span class="category">
-            <a href="/categories/杂谈">
-                <span class="icon">
-                    <a-icon type="book" theme="filled" /></span>
-                杂谈
-            </a>
-        </span>
         
 
         <span class="date">
@@ -212,6 +354,9 @@ $ hexo deploy
 </code></pre>
 <h3 id="Markdown-All-in-One（VSCode插件）"><a href="#Markdown-All-in-One（VSCode插件）" class="headerlink" title="Markdown All in One（VSCode插件）"></a>Markdown All in One（VSCode插件）</h3><pre><code class="tool">同步预览(Ctrl+Shift+V)
 </code></pre>
+<h3 id="图片示例"><a href="#图片示例" class="headerlink" title="图片示例"></a>图片示例</h3><p><img src="/2022/03/27/hello-world/Pig.png" alt="img"></p>
+<center>猪</center>
+
 <p>链接 : <a target="_blank" rel="noopener" href="https://github.com/Goatman1996">GoatMan</a></p>
 
             
@@ -220,6 +365,17 @@ $ hexo deploy
 
     <div class="post-tags">
         
+        <span class="icon">
+            <a-icon type="tags" theme="filled" />
+        </span>
+        
+        
+        <span class="tag">
+            
+            <a href="/tags/杂谈" style=color:#6484be>
+                杂谈
+            </a>
+        </span>
         
     </div>
 
