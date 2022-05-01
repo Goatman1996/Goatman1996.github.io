@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>羊男 || 常用的API_初级</title>
+    <title>羊男 || Shader笔记——初级</title>
     <meta name="author" content="GoatMan">
     <meta name="description" content="--《深渊》 ">
     <meta name="keywords" content=" ">
@@ -137,7 +137,7 @@
 <link rel="stylesheet" href="/css/post-body.css">
 <div class="article">
     <div>
-        <h1>常用的API_初级 </h1>
+        <h1>Shader笔记——初级 </h1>
     </div>
     <div class="info">
         <span class="date">
@@ -167,7 +167,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/渲染" style=color:#6484be>
+                <a href="/tags/渲染" style=color:#006674>
                     渲染
                 </a>
             </span>
@@ -179,16 +179,26 @@
     <div class="content" v-pre>
         <h3 id="Properties-属性"><a href="#Properties-属性" class="headerlink" title="Properties 属性"></a>Properties 属性</h3><pre><code class="shader">Properties
 &#123;
-    // 颜色值
-    _MyColor(&quot;MyColor&quot;,Color) = (1,1,1,1)
+    // 颜色值 (fixed4)
+    _MyColor(&quot;MyColor&quot;, Color) = (1,1,1,1)
+    // 范围内的一个数 (fixed)
+    _MyRange(&quot;MyRange&quot;, Range(8.0, 256)) = 20
+    // 贴图 &#123; sampler2D &amp; float4 (texName_ST 贴图的 Scale &amp; Tanslation) &#125;
+    _MyTexture(&quot;MyTexture&quot;,2D) = &quot;White&quot; &#123;&#125;
+    // 一个float值
+    _MyFloat(&quot;MyFloat&quot;,Float) = 1.0
 &#125;
 </code></pre>
 <h3 id="语义"><a href="#语义" class="headerlink" title="语义"></a>语义</h3><pre><code class="shader">struct appData
 &#123;
-    // （模型空间）顶点位置
+    // （模型空间）顶点位置 w = 1
     float4 vertex : POSITION;
     // （模型空间）顶点法线
     float3 normal : NORMAL;
+    // （模型空间）顶点切线
+    float3 tangent : TANGENT;
+    // 模型的第一组纹理坐标
+    float4 texcoord : TEXCOORD0;
 &#125;;
 
 struct v2f
@@ -200,41 +210,46 @@ struct v2f
 Fragment 的返回值为 fixed4 : SV_Target
 意为输出颜色
 </code></pre>
-<h3 id="mul操作"><a href="#mul操作" class="headerlink" title="mul操作"></a>mul操作</h3><p><img src="/2022/04/29/Render/API_Primary/mul.png" alt="img"></p>
-<center>HLSL文档</center>
-
-
-<pre><code class="shader">mul(x,y) 
-找到了个HLSL中的API说明（上图）
-1：当x为向量时，x将转换为行向量
-2：当y为向量时，y将转换为列向量
-
-但是上面两条不太好理解，甚至感觉不太符合逻辑
-所以，以下是我对UnityShader中mul函数的理解
-
-当做空间转换操作时，是以向量左乘矩阵的形式进行的
-所以当写作 mul(Matrix, Vector) 形式比较符合直观感觉
-而当写作 mul(Vector, Matrix) 时，实际上（我猜的）是做了mul(Matrix.Inverse, Vector)
+<h3 id="Tags"><a href="#Tags" class="headerlink" title="Tags"></a>Tags</h3><pre><code class="shader">Tags
+&#123;
+    // 光照模式 : 前向渲染
+    &quot;LightMode&quot; = &quot;ForwardBase&quot;
+    // 渲染队列 2450
+    &quot;Queue&quot; = &quot;AlphaTest&quot;
+    // 不受投影器影响
+    &quot;IgnoreProjector&quot; = &quot;True&quot;
+    // RenderType 用于着色器替换功能
+    &quot;RenderType&quot; = &quot;TransparentCutout&quot;
+&#125;
+</code></pre>
+<h3 id="mul操作"><a href="#mul操作" class="headerlink" title="mul操作"></a>mul操作</h3><pre><code class="shader">mul(M, v) == mul(v, tranpose(M));
+mul(v, M) == mul(tranpose(M), v);
 </code></pre>
 <h3 id="MVP操作"><a href="#MVP操作" class="headerlink" title="MVP操作"></a>MVP操作</h3><pre><code class="shader">UnityObjectToClipPos(float4 objPos)
+
+// 源码节选（包含不推荐使用 UNITY_MATRIX_MVP 的原因）
+// More efficient than computing M*VP matrix product
+return mul(UNITY_MATRIX_VP, mul(unity_ObjectToWorld, float4(pos, 1.0))
 
 // 来源
 =&gt; UnityCG.cginc
 ==&gt; UnityShaderUtilities.cginc
 </code></pre>
 <h3 id="object-lt-互相转换-gt-world"><a href="#object-lt-互相转换-gt-world" class="headerlink" title="object &lt;互相转换&gt; world"></a>object &lt;互相转换&gt; world</h3><pre><code class="shader">// object =&gt; world
-mul(unity_ObjectToWorld, objPos)
-or
-mul(objPos, unity_WorldToObject)
+顶点 : mul(unity_ObjectToWorld, float4(objPos.xyz, 1.0))
+向量 : mul((float3x3)unity_ObjectToWorld, dir) 或 UnityObjectToWorldDir(dir)
+法线 : mul(normal, (float3x3)unity_WorldToObject) 或 UnityObjectToWorldNormal(normal)
 
 // world =&gt; object
-mul(unity_WorldToObject, worldPos)
-or
-mul(worldPos, unity_ObjectToWorld)
+顶点 : mul(unity_WorldToObject, float4(objPos.xyz, 1.0));
+向量 : mul((float3x3)unity_WorldToObject, dir) 或 UnityWorldToObjectDir(dir)
 
 // unity_ObjectToWorld 和 unity_WorldToObject 的来源
 =&gt; UnityCG.cginc
 ==&gt; UnityShaderVariables.cginc
+
+// UnityObjectToWorldDir, UnityWorldToObjectDir, UnityObjectToWorldNormal 函数的来源
+=&gt; UnityCG.cginc
 </code></pre>
 <h3 id="Ambient-环境光-颜色"><a href="#Ambient-环境光-颜色" class="headerlink" title="Ambient 环境光 颜色"></a>Ambient 环境光 颜色</h3><pre><code class="shader">UNITY_LIGHTMODEL_AMBIENT.rgb
 
@@ -242,11 +257,24 @@ mul(worldPos, unity_ObjectToWorld)
 =&gt; UnityCG.cginc
 ==&gt; UnityShaderVariables.cginc
 </code></pre>
-<h3 id="光源方向-（只有一个光源且为平行光时）"><a href="#光源方向-（只有一个光源且为平行光时）" class="headerlink" title="光源方向 （只有一个光源且为平行光时）"></a>光源方向 （只有一个光源且为平行光时）</h3><pre><code class="shader">_WorldSpaceLightPos0.xyz
+<h3 id="光源方向"><a href="#光源方向" class="headerlink" title="光源方向"></a>光源方向</h3><pre><code class="shader">_WorldSpaceLightPos0.xyz
 
-// 来源
+// _WorldSpaceLightPos0 来源
 =&gt; UnityCG.cginc
 ==&gt; UnityShaderVariables.cginc
+
+// 推荐使用 build-in function
+worldLightDir = UnityWorldSpaceLightDir(worldPos);
+worldLightDir = WorldSpaceLightDir(objPos); // Legacy 请使用上面那个
+objLightDir = objSpaceLightDir(objPos);
+
+// build-in function 来源
+=&gt; UnityCG.cginc
+==&gt; UnityShaderVariables.cginc
+
+// 注释
+只有在前向渲染中，才能使用这个值（_WorldSpaceLightPos0）
+build-in function里的计算，也是使用了这个值
 </code></pre>
 <h3 id="光源颜色"><a href="#光源颜色" class="headerlink" title="光源颜色"></a>光源颜色</h3><pre><code class="shader">_LightColor0.rgb
 
@@ -267,6 +295,150 @@ Tags &#123; &quot;LightMode&quot; = &quot;ForwardBase&quot; &#125;
 
 将 float_X 限定在 0~1 之间，并返回
 类似于UnityEngine.Mathf.Clamp01函数
+</code></pre>
+<h3 id="reflect-反射函数"><a href="#reflect-反射函数" class="headerlink" title="reflect 反射函数"></a>reflect 反射函数</h3><pre><code class="shader">vector_Out = reflect(vector_In, vector_Normal);
+
+reflect 函数给定 入射方向vector_In 和 反射平面法线vector_Normal 后
+返回反射方向 vector_Out
+</code></pre>
+<h3 id="相机（观察者）位置"><a href="#相机（观察者）位置" class="headerlink" title="相机（观察者）位置"></a>相机（观察者）位置</h3><pre><code class="shader">_WorldSpaceCameraPos.xyz
+
+// _WorldSpaceCameraPos 来源
+=&gt; UnityCG.cginc
+==&gt; UnityShaderVariables.cginc
+
+// 推荐使用 build-in function 
+worldViewDir = UnityWorldSpaceViewDir(worldPos);
+worldViewDir = WorldSpaceViewDir(objPos); // Legacy 请使用上面那个
+objViewDir = ObjSpaceViewDir(objPos);
+
+// build-in function 来源
+=&gt; UnityCG.cginc
+</code></pre>
+<h3 id="pow-幂函数"><a href="#pow-幂函数" class="headerlink" title="pow 幂函数"></a>pow 幂函数</h3><pre><code class="shader">pow(x, y)
+
+返回 x^y
+</code></pre>
+<h3 id="max-amp-min-函数"><a href="#max-amp-min-函数" class="headerlink" title="max &amp; min 函数"></a>max &amp; min 函数</h3><pre><code class="shader">max(x, y) 返回 x和y中更大者
+min(x, y) 返回 x和y中更小者
+</code></pre>
+<h3 id="Transform-Texture-根据-ST计算uv坐标"><a href="#Transform-Texture-根据-ST计算uv坐标" class="headerlink" title="Transform Texture 根据_ST计算uv坐标"></a>Transform Texture 根据_ST计算uv坐标</h3><pre><code class="shader">float2 uv = appData.texcoord.xy * _Texture_ST.xy + _Texture_ST.zw;
+// or using build in function
+float2 uv = TRANSFORM_TEX(appData.texcoord, _Texture);
+
+// TRANSFORM_TEX 源码
+// Transforms 2D UV by scale/bias property
+#define TRANSFORM_TEX(tex,name) (tex.xy * name##_ST.xy + name##_ST.zw)
+
+// TRANSFORM_TEX 来源
+=&gt; UnityCG.cginc
+</code></pre>
+<h3 id="tex2D-纹理采样"><a href="#tex2D-纹理采样" class="headerlink" title="tex2D 纹理采样"></a>tex2D 纹理采样</h3><pre><code class="shader">fixed4 tex_Color = tex2D(_Texture, uv);
+</code></pre>
+<!-- ### object => tangent Matrix 模型空间 转 切线空间 矩阵 
+``` shader
+// Compute the binormal
+float3 binormal = cross(normalize(v.normal),normalize(v.tangent.xyz)) * v.tangent.w;
+// Matrix Object => Tangent
+float3x3 rotation = float3x3(v.tangent.xyz, binormal, v.normal);
+
+// or using build-in define
+TANGENT_SPACE_ROTATION;
+
+// 注
+使用 build-in define 有个要求就是 a2f 的变量变量名称要是 v
+且a2f结构中要有如下属性
+float3 normal : NORMAL;
+float4 tangent : TANGENT;
+
+// 源码
+// Declares 3x3 matrix 'rotation', filled with tangent space basis
+#define TANGENT_SPACE_ROTATION
+    float3 binormal = cross( normalize(v.normal), normalize(v.tangent.xyz) ) * v.tangent.w;
+    float3x3 rotation = float3x3( v.tangent.xyz, binormal, v.normal )
+
+// 来源
+=> UnityCG.cginc
+``` -->
+
+<h3 id="cross-叉乘"><a href="#cross-叉乘" class="headerlink" title="cross 叉乘"></a>cross 叉乘</h3><pre><code class="shader">cross(v1,v2)
+返回 v1 x v2
+</code></pre>
+<h3 id="sqrt-开根号"><a href="#sqrt-开根号" class="headerlink" title="sqrt 开根号"></a>sqrt 开根号</h3><pre><code class="shader">sqrt(x);
+返回 开根号 x
+</code></pre>
+<h3 id="法线贴图的采样（示例）"><a href="#法线贴图的采样（示例）" class="headerlink" title="法线贴图的采样（示例）"></a>法线贴图的采样（示例）</h3><pre><code class="shader">fixed4 packedNormal = tex2D(_BumpMap,v_Data.uv.zw);
+fixed3 tangentNormal;
+
+// BumpMap is not marked as &quot;Normal Map&quot;
+// 手动解析xy。不要使用，手动解析没有区分贴图类型选择正确的算法
+// tangentNormal.xy = (packedNormal.xy * 2 - 1);
+
+// BumpMap is marked as &quot;Normal Map&quot;
+tangentNormal.xy = UnpackNormal(packedNormal);      // build-in function &quot;UnpackNormal()&quot;
+tangentNormal.xy *= _BumpScale;
+tangentNormal.z = sqrt(1.0 - saturate(dot(tangentNormal.xy, tangentNormal.xy)));    // v·v = |v|^2
+
+// UnpackNormal(BumpMap的采样后解析) 
+=&gt; UnityCG.cginc
+</code></pre>
+<h3 id="任意-A空间-lt-B空间-的转换"><a href="#任意-A空间-lt-B空间-的转换" class="headerlink" title="任意 A空间 &lt;== B空间 的转换"></a>任意 A空间 &lt;== B空间 的转换</h3><pre><code class="shader">需要知道 A空间下，B坐标系的xyz轴向量 和 B原点坐标
+并以*列*矩阵排序，举例如下：
+// 注释： B_X_y 为 在A空间中，B坐标系的X轴向量的y分量，O为原点
+Matrix_BA = ( B_X_x, B_Y_x, B_Z_x, B_O_x )
+            ( B_X_y, B_Y_y, B_Z_y, B_O_y )
+            ( B_X_z, B_Y_z, B_Z_z, B_O_z )
+            ( 0,     0,     0,     1     )
+
+仅可以得到 Matrix_BA B=&gt;A 的 变换矩阵
+
+// 特别说明
+1 : 当使用变换矩阵对*方向向量*进行变换时，是不需要关心位移的
+    所以使用 (float3x3)Mtrix_BA 即可
+2 : 当使用的时 (float3x3)Matrix_BA, 并且用于构建该变换矩阵的 xyz轴向量是单位向量时
+    (float3x3)Matrix_BA 为正交矩阵，由正交矩阵的特性可得
+    (float3x3)Matrix_BA.Tranpose == (float3x3)Matrix_BA.Inverse == (float3x3)Matrix_AB
+</code></pre>
+<h3 id="RampMap-渐变纹理的使用"><a href="#RampMap-渐变纹理的使用" class="headerlink" title="RampMap 渐变纹理的使用"></a>RampMap 渐变纹理的使用</h3><p><img src="/2022/04/29/Render/Shader_Note/RampMap.png" alt="img"></p>
+<center>渐变纹理贴图</center>
+
+<p><img src="/2022/04/29/Render/Shader_Note/UsingRampMap.png" alt="img"></p>
+<center>使用渐变纹理(类似卡通风格)</center>
+
+<pre><code class="shader">fixed halfLambert = 0.5 * dot(worldNormal, worldLightDir) + 0.5;
+// 根据漫反射强度 采样渐变纹理
+fixed3 diffuseColor = tex2D(_RampMap, fixed2(halfLambert, halfLambert)).rgb * _Color.rgb;
+fixed3 diffuse = _LightColor0.rgb * diffuseColor;
+</code></pre>
+<h3 id="Alpha-Test-透明度测试"><a href="#Alpha-Test-透明度测试" class="headerlink" title="Alpha Test 透明度测试"></a>Alpha Test 透明度测试</h3><pre><code class="shader">// Alpha Test
+clip(texColor.a - _Cutoff);
+
+// Equal to
+if( (texColor.a - _Cutoff) &lt; 0.0)
+&#123;
+    discard;
+&#125;
+</code></pre>
+<h3 id="Alpha-Blend"><a href="#Alpha-Blend" class="headerlink" title="Alpha Blend"></a>Alpha Blend</h3><pre><code class="shader">// 关闭 深度写入 ZWrite
+ZWrite Off
+// 默认的操作符是 Add +
+BlendOp Add | Sub | RevSub | Min | Max
+// Blend
+Blend SrcAlpha OneMinusSrcAlpha
+// 剔除面 Cull Back | Front | Off 默认是 Back 
+Cull Back
+
+// Blend 注释
+Blend SrcFactor DstFactor
+NewColor = SrcFactor * SrcColor + DstFactor * DstColor
+
+// 与上面类似，只是Alpha分开算而已
+Blend SrcFactor DstFactor,
+SrcFactorA DstFactoryA
+</code></pre>
+<h3 id="ColorMask-颜色掩码"><a href="#ColorMask-颜色掩码" class="headerlink" title="ColorMask 颜色掩码"></a>ColorMask 颜色掩码</h3><pre><code class="shader">ColorMask RGBA
+指定写入特定的颜色通道
+0不写入任何颜色通道
 </code></pre>
 
     </div>
