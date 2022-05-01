@@ -1,8 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Hello World</title>
+    <url>/2022/03/27/hello-world/</url>
+    <content><![CDATA[<p>第一次使用Blog记录学习笔记</p>
+<p>第一篇是关于Blog的使用说明（记录以免忘记）</p>
+<h3 id="关于博客的操作"><a href="#关于博客的操作" class="headerlink" title="关于博客的操作"></a>关于博客的操作</h3><pre><code class="bash">//创建一片新的文章
+$ hexo new &quot;My New Post&quot;
+
+//本地运行Blog
+$ hexo server
+
+//生成静态网页
+$ hexo generate
+
+//发布
+$ hexo deploy
+</code></pre>
+<h3 id="Markdown-All-in-One（VSCode插件）"><a href="#Markdown-All-in-One（VSCode插件）" class="headerlink" title="Markdown All in One（VSCode插件）"></a>Markdown All in One（VSCode插件）</h3><pre><code class="tool">同步预览(Ctrl+Shift+V)
+</code></pre>
+<h3 id="图片示例"><a href="#图片示例" class="headerlink" title="图片示例"></a>图片示例</h3><p><img src="/2022/03/27/hello-world/Pig.png" alt="img"></p>
+<center>猪</center>
+
+<p>链接 : <a href="https://github.com/Goatman1996">GoatMan</a></p>
+]]></content>
+      <tags>
+        <tag>杂谈</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Shader笔记——初级</title>
-    <url>/2022/04/29/Render/Shader_Note/</url>
+    <url>/2022/05/01/Render/Shader_Note/</url>
     <content><![CDATA[<h3 id="Properties-属性"><a href="#Properties-属性" class="headerlink" title="Properties 属性"></a>Properties 属性</h3><pre><code class="shader">Properties
 &#123;
     // 颜色值 (fixed4)
@@ -225,10 +253,10 @@ Matrix_BA = ( B_X_x, B_Y_x, B_Z_x, B_O_x )
     (float3x3)Matrix_BA 为正交矩阵，由正交矩阵的特性可得
     (float3x3)Matrix_BA.Tranpose == (float3x3)Matrix_BA.Inverse == (float3x3)Matrix_AB
 </code></pre>
-<h3 id="RampMap-渐变纹理的使用"><a href="#RampMap-渐变纹理的使用" class="headerlink" title="RampMap 渐变纹理的使用"></a>RampMap 渐变纹理的使用</h3><p><img src="/2022/04/29/Render/Shader_Note/RampMap.png" alt="img"></p>
+<h3 id="RampMap-渐变纹理的使用"><a href="#RampMap-渐变纹理的使用" class="headerlink" title="RampMap 渐变纹理的使用"></a>RampMap 渐变纹理的使用</h3><p><img src="/2022/05/01/Render/Shader_Note/RampMap.png" alt="img"></p>
 <center>渐变纹理贴图</center>
 
-<p><img src="/2022/04/29/Render/Shader_Note/UsingRampMap.png" alt="img"></p>
+<p><img src="/2022/05/01/Render/Shader_Note/UsingRampMap.png" alt="img"></p>
 <center>使用渐变纹理(类似卡通风格)</center>
 
 <pre><code class="shader">fixed halfLambert = 0.5 * dot(worldNormal, worldLightDir) + 0.5;
@@ -272,34 +300,6 @@ SrcFactorA DstFactoryA
       </categories>
       <tags>
         <tag>渲染</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2022/03/27/hello-world/</url>
-    <content><![CDATA[<p>第一次使用Blog记录学习笔记</p>
-<p>第一篇是关于Blog的使用说明（记录以免忘记）</p>
-<h3 id="关于博客的操作"><a href="#关于博客的操作" class="headerlink" title="关于博客的操作"></a>关于博客的操作</h3><pre><code class="bash">//创建一片新的文章
-$ hexo new &quot;My New Post&quot;
-
-//本地运行Blog
-$ hexo server
-
-//生成静态网页
-$ hexo generate
-
-//发布
-$ hexo deploy
-</code></pre>
-<h3 id="Markdown-All-in-One（VSCode插件）"><a href="#Markdown-All-in-One（VSCode插件）" class="headerlink" title="Markdown All in One（VSCode插件）"></a>Markdown All in One（VSCode插件）</h3><pre><code class="tool">同步预览(Ctrl+Shift+V)
-</code></pre>
-<h3 id="图片示例"><a href="#图片示例" class="headerlink" title="图片示例"></a>图片示例</h3><p><img src="/2022/03/27/hello-world/Pig.png" alt="img"></p>
-<center>猪</center>
-
-<p>链接 : <a href="https://github.com/Goatman1996">GoatMan</a></p>
-]]></content>
-      <tags>
-        <tag>杂谈</tag>
       </tags>
   </entry>
 </search>

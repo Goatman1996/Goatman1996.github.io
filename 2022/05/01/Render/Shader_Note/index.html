@@ -144,7 +144,7 @@
             <span class="icon">
                 <a-icon type="calendar" theme="filled" />
             </span>
-            2022/4/29
+            2022/5/1
         </span>
 
         
@@ -399,10 +399,10 @@ Matrix_BA = ( B_X_x, B_Y_x, B_Z_x, B_O_x )
     (float3x3)Matrix_BA 为正交矩阵，由正交矩阵的特性可得
     (float3x3)Matrix_BA.Tranpose == (float3x3)Matrix_BA.Inverse == (float3x3)Matrix_AB
 </code></pre>
-<h3 id="RampMap-渐变纹理的使用"><a href="#RampMap-渐变纹理的使用" class="headerlink" title="RampMap 渐变纹理的使用"></a>RampMap 渐变纹理的使用</h3><p><img src="/2022/04/29/Render/Shader_Note/RampMap.png" alt="img"></p>
+<h3 id="RampMap-渐变纹理的使用"><a href="#RampMap-渐变纹理的使用" class="headerlink" title="RampMap 渐变纹理的使用"></a>RampMap 渐变纹理的使用</h3><p><img src="/2022/05/01/Render/Shader_Note/RampMap.png" alt="img"></p>
 <center>渐变纹理贴图</center>
 
-<p><img src="/2022/04/29/Render/Shader_Note/UsingRampMap.png" alt="img"></p>
+<p><img src="/2022/05/01/Render/Shader_Note/UsingRampMap.png" alt="img"></p>
 <center>使用渐变纹理(类似卡通风格)</center>
 
 <pre><code class="shader">fixed halfLambert = 0.5 * dot(worldNormal, worldLightDir) + 0.5;
