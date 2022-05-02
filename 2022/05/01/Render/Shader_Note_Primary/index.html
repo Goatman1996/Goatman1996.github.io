@@ -167,7 +167,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/渲染" style=color:#006674>
+                <a href="/tags/渲染" style=color:#607d8b>
                     渲染
                 </a>
             </span>
@@ -439,6 +439,24 @@ SrcFactorA DstFactoryA
 <h3 id="ColorMask-颜色掩码"><a href="#ColorMask-颜色掩码" class="headerlink" title="ColorMask 颜色掩码"></a>ColorMask 颜色掩码</h3><pre><code class="shader">ColorMask RGBA
 指定写入特定的颜色通道
 0不写入任何颜色通道
+</code></pre>
+<h3 id="Lambert-amp-HalfLambert-Diffuse-漫反射光照模型"><a href="#Lambert-amp-HalfLambert-Diffuse-漫反射光照模型" class="headerlink" title="Lambert &amp; HalfLambert (Diffuse) 漫反射光照模型"></a>Lambert &amp; HalfLambert (Diffuse) 漫反射光照模型</h3><pre><code class="shader">// Lambert
+fixed diffuseStrength = saturate(dot(worldNormal, worldLightDir));
+fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * diffuseStrength;
+
+// HalfLambert
+fixed halfLambert = dot(worldNormal,worldLightDir) * 0.5 + 0.5;
+fixed3 diffuse = _LightColor0.rgb * _Diffuse.rgb * halfLambert;
+</code></pre>
+<h3 id="Phong-amp-Blinn-Phong-Specular-高光反射光照模型"><a href="#Phong-amp-Blinn-Phong-Specular-高光反射光照模型" class="headerlink" title="Phong &amp; Blinn-Phong (Specular) 高光反射光照模型"></a>Phong &amp; Blinn-Phong (Specular) 高光反射光照模型</h3><pre><code class="shader">// Phong
+fixed3 reflection = normalize(reflect(-worldLightDir, worldNormal));
+fixed specularStrength = pow(saturate(dot(reflection, worldViewDir)),_Gloss);
+fixed3 specular = _LightColor0.rgb * _Specular.rgb * specularStrength;
+
+// Blinn-Phong
+fixed3 blinnDir = normalize(worldViewDir + worldLightDir);
+fixed specularStrength = pow(max(0, dot(blinnDir, worldNormal)),_Gloss);
+fixed3 specular = _LightColor0.rgb * _Specular.rgb * specularStrength;
 </code></pre>
 
     </div>
