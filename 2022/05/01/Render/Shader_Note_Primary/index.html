@@ -167,7 +167,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/渲染" style=color:#6484be>
+                <a href="/tags/渲染" style=color:#006674>
                     渲染
                 </a>
             </span>
@@ -213,9 +213,9 @@ Fragment 的返回值为 fixed4 : SV_Target
 <h3 id="Tags"><a href="#Tags" class="headerlink" title="Tags"></a>Tags</h3><pre><code class="shader">Tags
 &#123;
     // 光照模式 : 前向渲染
-    &quot;LightMode&quot; = &quot;ForwardBase&quot;
+    &quot;LightMode&quot; = &quot;ForwardBase&quot; | &quot;ForwardAdd&quot;
     // 渲染队列
-    &quot;Queue&quot; = &quot;AlphaTest&quot; | &quot;Transparent&quot;
+    &quot;Queue&quot; = &quot;Geometry&quot; | &quot;AlphaTest&quot; | &quot;Transparent&quot;
     // 不受投影器影响
     &quot;IgnoreProjector&quot; = &quot;True&quot;
     // RenderType 用于着色器替换功能
@@ -399,10 +399,10 @@ Matrix_BA = ( B_X_x, B_Y_x, B_Z_x, B_O_x )
     (float3x3)Matrix_BA 为正交矩阵，由正交矩阵的特性可得
     (float3x3)Matrix_BA.Tranpose == (float3x3)Matrix_BA.Inverse == (float3x3)Matrix_AB
 </code></pre>
-<h3 id="RampMap-渐变纹理的使用"><a href="#RampMap-渐变纹理的使用" class="headerlink" title="RampMap 渐变纹理的使用"></a>RampMap 渐变纹理的使用</h3><p><img src="/2022/05/01/Render/Shader_Note/RampMap.png" alt="img"></p>
+<h3 id="RampMap-渐变纹理的使用"><a href="#RampMap-渐变纹理的使用" class="headerlink" title="RampMap 渐变纹理的使用"></a>RampMap 渐变纹理的使用</h3><p><img src="/2022/05/01/Render/Shader_Note_Primary/RampMap.png" alt="img"></p>
 <center>渐变纹理贴图</center>
 
-<p><img src="/2022/05/01/Render/Shader_Note/UsingRampMap.png" alt="img"></p>
+<p><img src="/2022/05/01/Render/Shader_Note_Primary/UsingRampMap.png" alt="img"></p>
 <center>使用渐变纹理(类似卡通风格)</center>
 
 <pre><code class="shader">fixed halfLambert = 0.5 * dot(worldNormal, worldLightDir) + 0.5;

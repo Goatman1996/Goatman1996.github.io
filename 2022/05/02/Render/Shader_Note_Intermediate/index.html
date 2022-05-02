@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>羊男 || Hello World</title>
+    <title>羊男 || Shader笔记——中级</title>
     <meta name="author" content="GoatMan">
     <meta name="description" content="--《深渊》 ">
     <meta name="keywords" content=" ">
@@ -137,16 +137,25 @@
 <link rel="stylesheet" href="/css/post-body.css">
 <div class="article">
     <div>
-        <h1>Hello World </h1>
+        <h1>Shader笔记——中级 </h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <a-icon type="calendar" theme="filled" />
             </span>
-            2022/3/27
+            2022/5/2
         </span>
 
+        
+        <span class="category">
+            <a href="/categories/UnityShader入门学习笔记">
+                <span class="icon">
+                    <a-icon type="book" theme="filled" />
+                </span>
+                UnityShader入门学习笔记
+            </a>
+        </span>
         
 
         
@@ -158,8 +167,8 @@
             
             <span class="tag">
                 
-                <a href="/tags/杂谈" style=color:#6484be>
-                    杂谈
+                <a href="/tags/渲染" style=color:#016a99>
+                    渲染
                 </a>
             </span>
             
@@ -168,26 +177,109 @@
     </div>
 
     <div class="content" v-pre>
-        <p>第一次使用Blog记录学习笔记</p>
-<p>第一篇是关于Blog的使用说明（记录以免忘记）</p>
-<h3 id="关于博客的操作"><a href="#关于博客的操作" class="headerlink" title="关于博客的操作"></a>关于博客的操作</h3><pre><code class="bash">//创建一片新的文章
-$ hexo new &quot;My New Post&quot;
+        <h3 id="Light-Attenuation-光照衰减"><a href="#Light-Attenuation-光照衰减" class="headerlink" title="Light Attenuation 光照衰减"></a>Light Attenuation 光照衰减</h3><pre><code class="shader">// 确保光照衰减/阴影等被正确赋值
+#pragma multi_compile_fwdbase   // ForwardBase
+#pragma multi_compile_fwdadd    // ForwardAdd
 
-//本地运行Blog
-$ hexo server
+在ForwardAdd 中设置 
+Blend One One
 
-//生成静态网页
-$ hexo generate
+// Attenuation 衰减计算
+#ifdef USING_DIRECTIONAL_LIGHT
+    fixed atten = 1.0;
+#else
+    #if defined (POINT)
+        float3 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1)).xyz;
+        fixed atten = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
+    #elif defined (SPOT)
+        float4 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1.0));
+        fixed atten =   (lightCoord.z &gt; 0) * 
+                        tex2D(_LightTexture0, lightCoord.xy / lightCoord.w + 0.5).w * 
+                        tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
+    #else
+        fixed atten = 1.0; 
+    #endif
 
-//发布
-$ hexo deploy
+    // 或者自己算
+    // float distance = length(_WorldSpaceLightPos0.xyz - i.worldPos);
+    // fixed atten = 1.0 / distance;
+#endif
+
+return fixed4(ambient + (diffuse + specular) * atten, 1.0);
+
+// unity_WorldToLight 来源
+=&gt; AutoLight.cginc
 </code></pre>
-<h3 id="Markdown-All-in-One（VSCode插件）"><a href="#Markdown-All-in-One（VSCode插件）" class="headerlink" title="Markdown All in One（VSCode插件）"></a>Markdown All in One（VSCode插件）</h3><pre><code class="tool">同步预览(Ctrl+Shift+V)
-</code></pre>
-<h3 id="图片示例"><a href="#图片示例" class="headerlink" title="图片示例"></a>图片示例</h3><p><img src="/2022/03/27/hello-world/Pig.png" alt="img"></p>
-<center>猪</center>
+<h3 id="Shadow-Caster-投射阴影"><a href="#Shadow-Caster-投射阴影" class="headerlink" title="Shadow Caster 投射阴影"></a>Shadow Caster 投射阴影</h3><pre><code class="shader">Pass
+&#123;
+    Name &quot;Shadow Caster&quot;
+    Tags
+    &#123;
+        &quot;LightMode&quot; = &quot;ShadowCaster&quot;
+    &#125;
 
-<p>链接 : <a target="_blank" rel="noopener" href="https://github.com/Goatman1996">GoatMan</a></p>
+    CGPROGRAM
+    #pragma multi_compile_shadowcaster
+    #pragma vertex vert
+    #pragma fragment frag
+    #include &quot;UnityCG.cginc&quot;
+
+    struct v2f
+    &#123;
+        V2F_SHADOW_CASTER;
+    &#125;;
+
+    v2f vert(appdata_base v)
+    &#123;
+        v2f o;
+        TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);
+        return o;
+    &#125;
+
+    float4 frag(v2f i) : SV_Target
+    &#123;
+        SHADOW_CASTER_FRAGMENT(i);
+    &#125;
+    ENDCG
+&#125;
+
+// 单独做一个Material也是可以的，只是提示这样会消耗更多性能
+// 建议在一个Shader中使用多Pass实现
+// 更加建议使用Fallback实现
+</code></pre>
+<h3 id="Shadow-Receiver-阴影接收"><a href="#Shadow-Receiver-阴影接收" class="headerlink" title="Shadow Receiver 阴影接收"></a>Shadow Receiver 阴影接收</h3><pre><code class="shader">// 在对应的地方加上代码即可
+
+struct v2f
+&#123;
+    SHADOW_COORDS(0) // 参数是下一个可用插值寄存器的索引值
+&#125;;
+
+v2f vert(a2v v)
+&#123;
+    v2f ret;
+    TRANSFER_SHADOW(ret);
+    return ret;
+&#125;
+
+fixed4 frag(v2f i) : SV_Target
+&#123;
+    // Shadow Receiver
+    fixed shadow = SHADOW_ATTENUATION(i);
+
+    return fixed4(ambient + (diffuse + specular) * atten * shadow, 1.0);
+&#125;
+</code></pre>
+<h3 id="同时包含光照-衰减-和-阴影-接收的宏"><a href="#同时包含光照-衰减-和-阴影-接收的宏" class="headerlink" title="同时包含光照 衰减 和 阴影 接收的宏"></a>同时包含光照 衰减 和 阴影 接收的宏</h3><pre><code class="shader">UNITY_LIGHT_ATTENUATION(atten, v2f i, float3 worldPos)
+
+这个方式非常简单的同时实现了光照衰减和接收阴影 
+atten 同时包含两者
+
+// 来源
+=&gt; AutoLight.cginc
+</code></pre>
+<h3 id="导致阴影很糊的一种可能"><a href="#导致阴影很糊的一种可能" class="headerlink" title="导致阴影很糊的一种可能"></a>导致阴影很糊的一种可能</h3><pre><code class="shader">Quality Settings =&gt; Shadow Projection
+Stable Fit糊 Close Fit不糊 
+</code></pre>
 
     </div>
 

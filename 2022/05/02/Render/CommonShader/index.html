@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<html lang="zh_CN ">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>羊男 || Shader笔记——完整光照</title>
+    <meta name="author" content="GoatMan">
+    <meta name="description" content="--《深渊》 ">
+    <meta name="keywords" content=" ">
+    <link rel="icon" href="/Img/Head.jpg">
+    <link rel="stylesheet" href="/css/antd.min.css">
+    
+    <link rel="stylesheet" href="/css/night-theme.css">
+    
+    <script src="/js/vue.js"></script>
+    <script src="/js/antd.min.js"></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+<body>
+
+    <div id="loading"
+        style="height: 100vh; width: 100%; position: fixed;display: flex;z-index: 200; justify-content: space-between;">
+        <div id="loadleft" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div id="loadright" style="width: 50%;background-color: #ffffff;transition: width 0.6s ease-out;"></div>
+        <div
+            style="position: fixed; height: 100vh; width: 100%;display: flex;justify-content: center;align-items: center;">
+            <div id="loadcontent"
+                style="width:400px;height:400px;padding:50px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:solid 10px#a3ddfb; text-align:center;opacity:1;transition:opacity 0.3s ease-out;">
+                <div>
+                    <h2>LOADING...</h2>
+                    <p>加载过慢请开启缓存(浏览器默认开启)</p>
+                    <div>
+                        <img src="/dancingkitty.gif" alt="loading">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layout">
+        <transition name="into">
+            <div v-show="show_page" style="display: none;">
+                <div id="menu_show">
+                     
+<nav id="menu">
+    <div class="desktop-menu">
+        <a href="/">
+            <span class="title">羊男</span>
+        </a>
+        
+        <a href="/">
+            <span>
+                <a-icon type="home" theme="filled" />
+            </span>
+            <span>主页</span>
+        </a>
+        
+        <a href="/archives">
+            <span>
+                <a-icon type="folder" theme="filled" />
+            </span>
+            <span>归档</span>
+        </a>
+        
+        <a href="/categories">
+            <span>
+                <a-icon type="book" theme="filled" />
+            </span>
+            <span>分类</span>
+        </a>
+        
+        <a href="/tags">
+            <span>
+                <a-icon type="tags" theme="filled" />
+            </span>
+            <span>标签</span>
+        </a>
+        
+    </div>
+
+    <div :class="'phone-menu ' + menu_show" id="phone-menu">
+        <div :class="'title'" @click="menu_show=!menu_show">
+            <span style="margin-right: 10px;">
+                <a-icon type="appstore" theme="filled" />
+            </span>
+            <span>羊男</span>
+        </div>
+        <div class="items" v-show="menu_show">
+            
+            <a href="/">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="home" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">主页</div>
+                </div>
+            </a>
+            
+            <a href="/archives">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="folder" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">归档</div>
+                </div>
+            </a>
+            
+            <a href="/categories">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="book" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">分类</div>
+                </div>
+            </a>
+            
+            <a href="/tags">
+                <div class="item">
+                    <div style="min-width:20px; max-width:50px; width: 10%">
+                        <a-icon type="tags" theme="filled" />
+                    </div>
+                    <div style="min-width:100px;max-width: 150%;width: 20%;">标签</div>
+                </div>
+            </a>
+            
+        </div>
+        <div class="curtain" v-show="menu_show"></div>
+    </div>
+
+</nav>
+                </div>
+
+                <div id="main">
+                     
+<link rel="stylesheet" href="/css/post-body.css">
+<div class="article">
+    <div>
+        <h1>Shader笔记——完整光照 </h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <a-icon type="calendar" theme="filled" />
+            </span>
+            2022/5/2
+        </span>
+
+        
+        <span class="category">
+            <a href="/categories/UnityShader入门学习笔记">
+                <span class="icon">
+                    <a-icon type="book" theme="filled" />
+                </span>
+                UnityShader入门学习笔记
+            </a>
+        </span>
+        
+
+        
+
+        <span class="tags">
+            <span class="icon">
+                <a-icon type="tags" theme="filled" />
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/渲染" style=color:#006674>
+                    渲染
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+
+    <div class="content" v-pre>
+        <h3 id="Shader入门里的完整光照"><a href="#Shader入门里的完整光照" class="headerlink" title="Shader入门里的完整光照"></a>Shader入门里的完整光照</h3><pre><code class="shader">// Upgrade NOTE: replaced &#39;_Object2World&#39; with &#39;unity_ObjectToWorld&#39;
+// Upgrade NOTE: replaced &#39;mul(UNITY_MATRIX_MVP,*)&#39; with &#39;UnityObjectToClipPos(*)&#39;
+
+Shader &quot;Unity Shaders Book/Common/Bumped Specular&quot; &#123;
+    Properties &#123;
+        _Color (&quot;Color Tint&quot;, Color) = (1, 1, 1, 1)
+        _MainTex (&quot;Main Tex&quot;, 2D) = &quot;white&quot; &#123;&#125;
+        _BumpMap (&quot;Normal Map&quot;, 2D) = &quot;bump&quot; &#123;&#125;
+        _Specular (&quot;Specular Color&quot;, Color) = (1, 1, 1, 1)
+        _Gloss (&quot;Gloss&quot;, Range(8.0, 256)) = 20
+    &#125;
+    SubShader &#123;
+        Tags &#123; &quot;RenderType&quot;=&quot;Opaque&quot; &quot;Queue&quot;=&quot;Geometry&quot;&#125;
+        
+        Pass &#123; 
+            Tags &#123; &quot;LightMode&quot;=&quot;ForwardBase&quot; &#125;
+        
+            CGPROGRAM
+            
+            #pragma multi_compile_fwdbase    
+            
+            #pragma vertex vert
+            #pragma fragment frag
+            
+            #include &quot;UnityCG.cginc&quot;
+            #include &quot;Lighting.cginc&quot;
+            #include &quot;AutoLight.cginc&quot;
+            
+            fixed4 _Color;
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            sampler2D _BumpMap;
+            float4 _BumpMap_ST;
+            fixed4 _Specular;
+            float _Gloss;
+            
+            struct a2v &#123;
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float4 tangent : TANGENT;
+                float4 texcoord : TEXCOORD0;
+            &#125;;
+            
+            struct v2f &#123;
+                float4 pos : SV_POSITION;
+                float4 uv : TEXCOORD0;
+                float4 TtoW0 : TEXCOORD1;  
+                float4 TtoW1 : TEXCOORD2;  
+                float4 TtoW2 : TEXCOORD3; 
+                SHADOW_COORDS(4)
+            &#125;;
+            
+            v2f vert(a2v v) &#123;
+                 v2f o;
+                 o.pos = UnityObjectToClipPos(v.vertex);
+             
+                 o.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+                 o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
+
+                TANGENT_SPACE_ROTATION;
+                
+                float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;  
+                fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);  
+                fixed3 worldTangent = UnityObjectToWorldDir(v.tangent.xyz);  
+                fixed3 worldBinormal = cross(worldNormal, worldTangent) * v.tangent.w; 
+                
+                o.TtoW0 = float4(worldTangent.x, worldBinormal.x, worldNormal.x, worldPos.x);  
+                o.TtoW1 = float4(worldTangent.y, worldBinormal.y, worldNormal.y, worldPos.y);  
+                o.TtoW2 = float4(worldTangent.z, worldBinormal.z, worldNormal.z, worldPos.z);  
+                  
+                  TRANSFER_SHADOW(o);
+                 
+                 return o;
+            &#125;
+            
+            fixed4 frag(v2f i) : SV_Target &#123;
+                float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
+                fixed3 lightDir = normalize(UnityWorldSpaceLightDir(worldPos));
+                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
+                
+                fixed3 bump = UnpackNormal(tex2D(_BumpMap, i.uv.zw));
+                bump = normalize(half3(dot(i.TtoW0.xyz, bump), dot(i.TtoW1.xyz, bump), dot(i.TtoW2.xyz, bump)));
+
+                fixed3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Color.rgb;
+                
+                fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz * albedo;
+                
+                 fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(bump, lightDir));
+                 
+                 fixed3 halfDir = normalize(lightDir + viewDir);
+                 fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(bump, halfDir)), _Gloss);
+            
+                UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
+
+                return fixed4(ambient + (diffuse + specular) * atten, 1.0);
+            &#125;
+            
+            ENDCG
+        &#125;
+        
+        Pass &#123; 
+            Tags &#123; &quot;LightMode&quot;=&quot;ForwardAdd&quot; &#125;
+            
+            Blend One One
+        
+            CGPROGRAM
+            
+            #pragma multi_compile_fwdadd
+            // Use the line below to add shadows for point and spot lights
+//            #pragma multi_compile_fwdadd_fullshadows
+            
+            #pragma vertex vert
+            #pragma fragment frag
+            
+            #include &quot;Lighting.cginc&quot;
+            #include &quot;AutoLight.cginc&quot;
+            
+            fixed4 _Color;
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+            sampler2D _BumpMap;
+            float4 _BumpMap_ST;
+            float _BumpScale;
+            fixed4 _Specular;
+            float _Gloss;
+            
+            struct a2v &#123;
+                float4 vertex : POSITION;
+                float3 normal : NORMAL;
+                float4 tangent : TANGENT;
+                float4 texcoord : TEXCOORD0;
+            &#125;;
+            
+            struct v2f &#123;
+                float4 pos : SV_POSITION;
+                float4 uv : TEXCOORD0;
+                float4 TtoW0 : TEXCOORD1;  
+                float4 TtoW1 : TEXCOORD2;  
+                float4 TtoW2 : TEXCOORD3;
+                SHADOW_COORDS(4)
+            &#125;;
+            
+            v2f vert(a2v v) &#123;
+                 v2f o;
+                 o.pos = UnityObjectToClipPos(v.vertex);
+             
+                 o.uv.xy = v.texcoord.xy * _MainTex_ST.xy + _MainTex_ST.zw;
+                 o.uv.zw = v.texcoord.xy * _BumpMap_ST.xy + _BumpMap_ST.zw;
+
+                float3 worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;  
+                fixed3 worldNormal = UnityObjectToWorldNormal(v.normal);  
+                fixed3 worldTangent = UnityObjectToWorldDir(v.tangent.xyz);  
+                fixed3 worldBinormal = cross(worldNormal, worldTangent) * v.tangent.w; 
+    
+                  o.TtoW0 = float4(worldTangent.x, worldBinormal.x, worldNormal.x, worldPos.x);
+                  o.TtoW1 = float4(worldTangent.y, worldBinormal.y, worldNormal.y, worldPos.y);
+                  o.TtoW2 = float4(worldTangent.z, worldBinormal.z, worldNormal.z, worldPos.z);  
+                 
+                 TRANSFER_SHADOW(o);
+                 
+                 return o;
+            &#125;
+            
+            fixed4 frag(v2f i) : SV_Target &#123;
+                float3 worldPos = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
+                fixed3 lightDir = normalize(UnityWorldSpaceLightDir(worldPos));
+                fixed3 viewDir = normalize(UnityWorldSpaceViewDir(worldPos));
+                
+                fixed3 bump = UnpackNormal(tex2D(_BumpMap, i.uv.zw));
+                bump = normalize(half3(dot(i.TtoW0.xyz, bump), dot(i.TtoW1.xyz, bump), dot(i.TtoW2.xyz, bump)));
+                
+                fixed3 albedo = tex2D(_MainTex, i.uv.xy).rgb * _Color.rgb;
+                
+                 fixed3 diffuse = _LightColor0.rgb * albedo * max(0, dot(bump, lightDir));
+                 
+                 fixed3 halfDir = normalize(lightDir + viewDir);
+                 fixed3 specular = _LightColor0.rgb * _Specular.rgb * pow(max(0, dot(bump, halfDir)), _Gloss);
+            
+                UNITY_LIGHT_ATTENUATION(atten, i, worldPos);
+
+                return fixed4((diffuse + specular) * atten, 1.0);
+            &#125;
+            
+            ENDCG
+        &#125;
+    &#125; 
+    FallBack &quot;Specular&quot;
+&#125;
+</code></pre>
+
+    </div>
+
+    
+</div>
+                     
+<footer id="footer">
+    <div class="footer-wrap">
+        <div>
+            © 2022 - 2022 羊男
+            <span class="footer-icon">
+                <a-icon type="flag" theme="filled" /></span>
+            @GoatMan
+        </div>
+        <div></div>
+        <div>Based on the <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo Engine</a> & <a
+                target="_blank" rel="noopener" href="https://github.com/korilin/hexo-theme-particle">Particle Theme</a></div>
+        
+    </div>
+
+</footer>
+
+<script src="/js/highlight.min.js"></script>
+<script src="/js/particle.js"></script>
+                </div>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+    new Vue({
+        el: "#layout",
+        data: {
+            show_page: false,
+            onload_menu: false,
+            menu_show: false,
+            card_top: 100
+        },
+        created: function () {
+            var that = this
+            window.onload = function () {
+                that.show_page = true
+                document.getElementById("loadcontent").style.opacity = 0
+                setTimeout(function () {
+                    document.getElementById("loadleft").style.width = 0
+                    document.getElementById("loadright").style.width = 0
+                }, 300)
+                setTimeout(function () {
+                    document.getElementById("loading").style = "display:none"
+                }, 600)
+            }
+        },
+        mounted: function () {
+            var that = this
+            window.addEventListener('scroll', function (e) {
+                that.menu_show = false
+            })
+        },
+        methods: {
+            home_click: function () {
+                window.scrollTo({
+                    top: window.innerHeight - 80,
+                    behavior: "smooth",
+                });
+            }
+        }
+    })
+</script>
+
+</body>
+
+</html>
