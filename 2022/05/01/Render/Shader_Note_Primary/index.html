@@ -167,7 +167,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/渲染" style=color:#607d8b>
+                <a href="/tags/渲染" style=color:#6484be>
                     渲染
                 </a>
             </span>
@@ -184,9 +184,11 @@
     // 范围内的一个数 (fixed)
     _MyRange(&quot;MyRange&quot;, Range(8.0, 256)) = 20
     // 贴图 &#123; sampler2D &amp; float4 (texName_ST 贴图的 Scale &amp; Tanslation) &#125;
-    _MyTexture(&quot;MyTexture&quot;,2D) = &quot;White&quot; &#123;&#125;
+    _MyTexture(&quot;MyTexture&quot;,2D) = &quot;white&quot; | &quot;bump&quot; &#123;&#125;
     // 一个float值
     _MyFloat(&quot;MyFloat&quot;,Float) = 1.0
+    // CubeMap &#123; samplerCUBE &#125;
+    _MyCubeMap(&quot;MyCubeMap&quot;,Cube) = &quot;_Skybox&quot; &#123;&#125;
 &#125;
 </code></pre>
 <h3 id="语义"><a href="#语义" class="headerlink" title="语义"></a>语义</h3><pre><code class="shader">struct appData
@@ -366,6 +368,9 @@ float4 tangent : TANGENT;
 </code></pre>
 <h3 id="sqrt-开根号"><a href="#sqrt-开根号" class="headerlink" title="sqrt 开根号"></a>sqrt 开根号</h3><pre><code class="shader">sqrt(x);
 返回 开根号 x
+</code></pre>
+<h3 id="Lerp-插值"><a href="#Lerp-插值" class="headerlink" title="Lerp 插值"></a>Lerp 插值</h3><pre><code class="shader">Lerp(A,B,Amount)
+返回值为A到B之间的插值，比重 Amount
 </code></pre>
 <h3 id="法线贴图的采样（示例）"><a href="#法线贴图的采样（示例）" class="headerlink" title="法线贴图的采样（示例）"></a>法线贴图的采样（示例）</h3><pre><code class="shader">fixed4 packedNormal = tex2D(_BumpMap,v_Data.uv.zw);
 fixed3 tangentNormal;

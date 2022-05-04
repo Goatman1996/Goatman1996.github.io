@@ -167,7 +167,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/渲染" style=color:#006674>
+                <a href="/tags/渲染" style=color:#6484be>
                     渲染
                 </a>
             </span>
@@ -279,6 +279,31 @@ atten 同时包含两者
 </code></pre>
 <h3 id="导致阴影很糊的一种可能"><a href="#导致阴影很糊的一种可能" class="headerlink" title="导致阴影很糊的一种可能"></a>导致阴影很糊的一种可能</h3><pre><code class="shader">Quality Settings =&gt; Shadow Projection
 Stable Fit糊 Close Fit不糊 
+</code></pre>
+<h3 id="CubeMap-的采样与使用"><a href="#CubeMap-的采样与使用" class="headerlink" title="CubeMap 的采样与使用"></a>CubeMap 的采样与使用</h3><pre><code class="shader">texCUBE(_CubeMap, fixed3 cubeViewDir)
+
+反射 的使用 与 采样
+viewReflection = reflect(-worldViewDir, worldNormal);
+fixed3 reflectColor = texCUBE(_CubeMap, viewReflection).rgb * _ReflectionColor.rgb;
+
+折射 的使用 与 采样
+viewRefraction = refract(-noramlize(worldViewDir), normalize(ret.worldNormal), _RefractionRatio);
+fixed3 refractionColor = texCUBE(_CubeMap, viewRefraction).rgb * _RefractionColor.rgb;
+</code></pre>
+<h3 id="GrabPass"><a href="#GrabPass" class="headerlink" title="GrabPass"></a>GrabPass</h3><pre><code class="shader">在SubShader中
+GrabPass &#123; &quot;_RefractionTex&quot; &#125;
+下一个Pass，将会的到屏幕截图
+贴图名字是_RefractionTex;
+
+使用（抓取屏幕，制作玻璃效果）
+sampler2D _RefractionTex;
+float4 _RefractionTex_TexelSize;
+
+screenPos = ComputeGrabScreenPos(clipPos);  // =&gt; UnityCG.cginc
+
+float2 offset = bump.xy * _Distortion * _RefractionTex_TexelSize.xy;
+iscreenPos.xy = offset * i.screenPos.z + screenPos.xy;  // 扰动量
+fixed3 refractColor = tex2D(_RefractionTex, screenPos.xy / screenPos.w).rgb;    // 透视除法
 </code></pre>
 
     </div>
