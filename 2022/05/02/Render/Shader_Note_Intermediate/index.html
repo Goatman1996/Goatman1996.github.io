@@ -167,7 +167,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/渲染" style=color:#6484be>
+                <a href="/tags/渲染" style=color:#006674>
                     渲染
                 </a>
             </span>
@@ -177,7 +177,10 @@
     </div>
 
     <div class="content" v-pre>
-        <h3 id="Light-Attenuation-光照衰减"><a href="#Light-Attenuation-光照衰减" class="headerlink" title="Light Attenuation 光照衰减"></a>Light Attenuation 光照衰减</h3><pre><code class="shader">// 确保光照衰减/阴影等被正确赋值
+        <p>《UnityShader入门精要》中级篇–笔记</p>
+<span id="more"></span>
+
+<h3 id="Light-Attenuation-光照衰减"><a href="#Light-Attenuation-光照衰减" class="headerlink" title="Light Attenuation 光照衰减"></a>Light Attenuation 光照衰减</h3><pre><code class="shader">// 确保光照衰减/阴影等被正确赋值
 #pragma multi_compile_fwdbase   // ForwardBase
 #pragma multi_compile_fwdadd    // ForwardAdd
 
@@ -292,7 +295,7 @@ fixed3 refractionColor = texCUBE(_CubeMap, viewRefraction).rgb * _RefractionColo
 </code></pre>
 <h3 id="GrabPass"><a href="#GrabPass" class="headerlink" title="GrabPass"></a>GrabPass</h3><pre><code class="shader">在SubShader中
 GrabPass &#123; &quot;_RefractionTex&quot; &#125;
-下一个Pass，将会的到屏幕截图
+下一个Pass，将会的到屏幕截图，如果多个Shader.Pass中的GrabPass贴图名字相同则复用
 贴图名字是_RefractionTex;
 
 使用（抓取屏幕，制作玻璃效果）
@@ -304,6 +307,15 @@ screenPos = ComputeGrabScreenPos(clipPos);  // =&gt; UnityCG.cginc
 float2 offset = bump.xy * _Distortion * _RefractionTex_TexelSize.xy;
 iscreenPos.xy = offset * i.screenPos.z + screenPos.xy;  // 扰动量
 fixed3 refractColor = tex2D(_RefractionTex, screenPos.xy / screenPos.w).rgb;    // 透视除法
+</code></pre>
+<h3 id="Time"><a href="#Time" class="headerlink" title="Time"></a>Time</h3><pre><code class="shader">float4 _Time
+t 是自该场景开始所经过的事件，(t/20,t,2t,3t)
+</code></pre>
+<h3 id="frac函数"><a href="#frac函数" class="headerlink" title="frac函数"></a>frac函数</h3><pre><code class="shader">// 取小数部分
+float frac(float v)
+&#123;
+    return v - floor(v);
+&#125;
 </code></pre>
 
     </div>

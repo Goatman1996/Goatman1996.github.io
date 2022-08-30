@@ -167,7 +167,7 @@
             
             <span class="tag">
                 
-                <a href="/tags/渲染" style=color:#6484be>
+                <a href="/tags/渲染" style=color:#016a99>
                     渲染
                 </a>
             </span>
@@ -177,7 +177,10 @@
     </div>
 
     <div class="content" v-pre>
-        <h3 id="Properties-属性"><a href="#Properties-属性" class="headerlink" title="Properties 属性"></a>Properties 属性</h3><pre><code class="shader">Properties
+        <p>《UnityShader入门精要》初级篇–笔记</p>
+<span id="more"></span>
+
+<h3 id="Properties-属性"><a href="#Properties-属性" class="headerlink" title="Properties 属性"></a>Properties 属性</h3><pre><code class="shader">Properties
 &#123;
     // 颜色值 (fixed4)
     _MyColor(&quot;MyColor&quot;, Color) = (1,1,1,1)
@@ -222,6 +225,8 @@ Fragment 的返回值为 fixed4 : SV_Target
     &quot;IgnoreProjector&quot; = &quot;True&quot;
     // RenderType 用于着色器替换功能
     &quot;RenderType&quot; = &quot;TransparentCutout&quot;
+    // 禁用合批
+    &quot;DisableBatching&quot; = &quot;True&quot;
 &#125;
 </code></pre>
 <h3 id="mul操作"><a href="#mul操作" class="headerlink" title="mul操作"></a>mul操作</h3><pre><code class="shader">mul(M, v) == mul(v, tranpose(M));

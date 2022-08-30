@@ -4,7 +4,9 @@
     <title>Hello World</title>
     <url>/2022/03/27/hello-world/</url>
     <content><![CDATA[<p>第一次使用Blog记录学习笔记</p>
-<p>第一篇是关于Blog的使用说明（记录以免忘记）</p>
+<p>第一篇是关于Blog的使用说明（记录以免忘记）<br>（首页的预览节选到此为止）</p>
+<span id="more"></span>
+
 <h3 id="关于博客的操作"><a href="#关于博客的操作" class="headerlink" title="关于博客的操作"></a>关于博客的操作</h3><pre><code class="bash">//创建一片新的文章
 $ hexo new &quot;My New Post&quot;
 
@@ -29,148 +31,12 @@ $ hexo deploy
       </tags>
   </entry>
   <entry>
-    <title>Shader笔记——中级</title>
-    <url>/2022/05/02/Render/Shader_Note_Intermediate/</url>
-    <content><![CDATA[<h3 id="Light-Attenuation-光照衰减"><a href="#Light-Attenuation-光照衰减" class="headerlink" title="Light Attenuation 光照衰减"></a>Light Attenuation 光照衰减</h3><pre><code class="shader">// 确保光照衰减/阴影等被正确赋值
-#pragma multi_compile_fwdbase   // ForwardBase
-#pragma multi_compile_fwdadd    // ForwardAdd
-
-在ForwardAdd 中设置 
-Blend One One
-
-// Attenuation 衰减计算
-#ifdef USING_DIRECTIONAL_LIGHT
-    fixed atten = 1.0;
-#else
-    #if defined (POINT)
-        float3 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1)).xyz;
-        fixed atten = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
-    #elif defined (SPOT)
-        float4 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1.0));
-        fixed atten =   (lightCoord.z &gt; 0) * 
-                        tex2D(_LightTexture0, lightCoord.xy / lightCoord.w + 0.5).w * 
-                        tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
-    #else
-        fixed atten = 1.0; 
-    #endif
-
-    // 或者自己算
-    // float distance = length(_WorldSpaceLightPos0.xyz - i.worldPos);
-    // fixed atten = 1.0 / distance;
-#endif
-
-return fixed4(ambient + (diffuse + specular) * atten, 1.0);
-
-// unity_WorldToLight 来源
-=&gt; AutoLight.cginc
-</code></pre>
-<h3 id="Shadow-Caster-投射阴影"><a href="#Shadow-Caster-投射阴影" class="headerlink" title="Shadow Caster 投射阴影"></a>Shadow Caster 投射阴影</h3><pre><code class="shader">Pass
-&#123;
-    Name &quot;Shadow Caster&quot;
-    Tags
-    &#123;
-        &quot;LightMode&quot; = &quot;ShadowCaster&quot;
-    &#125;
-
-    CGPROGRAM
-    #pragma multi_compile_shadowcaster
-    #pragma vertex vert
-    #pragma fragment frag
-    #include &quot;UnityCG.cginc&quot;
-
-    struct v2f
-    &#123;
-        V2F_SHADOW_CASTER;
-    &#125;;
-
-    v2f vert(appdata_base v)
-    &#123;
-        v2f o;
-        TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);
-        return o;
-    &#125;
-
-    float4 frag(v2f i) : SV_Target
-    &#123;
-        SHADOW_CASTER_FRAGMENT(i);
-    &#125;
-    ENDCG
-&#125;
-
-// 单独做一个Material也是可以的，只是提示这样会消耗更多性能
-// 建议在一个Shader中使用多Pass实现
-// 更加建议使用Fallback实现
-</code></pre>
-<h3 id="Shadow-Receiver-阴影接收"><a href="#Shadow-Receiver-阴影接收" class="headerlink" title="Shadow Receiver 阴影接收"></a>Shadow Receiver 阴影接收</h3><pre><code class="shader">// 在对应的地方加上代码即可
-
-struct v2f
-&#123;
-    SHADOW_COORDS(0) // 参数是下一个可用插值寄存器的索引值
-&#125;;
-
-v2f vert(a2v v)
-&#123;
-    v2f ret;
-    TRANSFER_SHADOW(ret);
-    return ret;
-&#125;
-
-fixed4 frag(v2f i) : SV_Target
-&#123;
-    // Shadow Receiver
-    fixed shadow = SHADOW_ATTENUATION(i);
-
-    return fixed4(ambient + (diffuse + specular) * atten * shadow, 1.0);
-&#125;
-</code></pre>
-<h3 id="同时包含光照-衰减-和-阴影-接收的宏"><a href="#同时包含光照-衰减-和-阴影-接收的宏" class="headerlink" title="同时包含光照 衰减 和 阴影 接收的宏"></a>同时包含光照 衰减 和 阴影 接收的宏</h3><pre><code class="shader">UNITY_LIGHT_ATTENUATION(atten, v2f i, float3 worldPos)
-
-这个方式非常简单的同时实现了光照衰减和接收阴影 
-atten 同时包含两者
-
-// 来源
-=&gt; AutoLight.cginc
-</code></pre>
-<h3 id="导致阴影很糊的一种可能"><a href="#导致阴影很糊的一种可能" class="headerlink" title="导致阴影很糊的一种可能"></a>导致阴影很糊的一种可能</h3><pre><code class="shader">Quality Settings =&gt; Shadow Projection
-Stable Fit糊 Close Fit不糊 
-</code></pre>
-<h3 id="CubeMap-的采样与使用"><a href="#CubeMap-的采样与使用" class="headerlink" title="CubeMap 的采样与使用"></a>CubeMap 的采样与使用</h3><pre><code class="shader">texCUBE(_CubeMap, fixed3 cubeViewDir)
-
-反射 的使用 与 采样
-viewReflection = reflect(-worldViewDir, worldNormal);
-fixed3 reflectColor = texCUBE(_CubeMap, viewReflection).rgb * _ReflectionColor.rgb;
-
-折射 的使用 与 采样
-viewRefraction = refract(-noramlize(worldViewDir), normalize(ret.worldNormal), _RefractionRatio);
-fixed3 refractionColor = texCUBE(_CubeMap, viewRefraction).rgb * _RefractionColor.rgb;
-</code></pre>
-<h3 id="GrabPass"><a href="#GrabPass" class="headerlink" title="GrabPass"></a>GrabPass</h3><pre><code class="shader">在SubShader中
-GrabPass &#123; &quot;_RefractionTex&quot; &#125;
-下一个Pass，将会的到屏幕截图
-贴图名字是_RefractionTex;
-
-使用（抓取屏幕，制作玻璃效果）
-sampler2D _RefractionTex;
-float4 _RefractionTex_TexelSize;
-
-screenPos = ComputeGrabScreenPos(clipPos);  // =&gt; UnityCG.cginc
-
-float2 offset = bump.xy * _Distortion * _RefractionTex_TexelSize.xy;
-iscreenPos.xy = offset * i.screenPos.z + screenPos.xy;  // 扰动量
-fixed3 refractColor = tex2D(_RefractionTex, screenPos.xy / screenPos.w).rgb;    // 透视除法
-</code></pre>
-]]></content>
-      <categories>
-        <category>UnityShader入门学习笔记</category>
-      </categories>
-      <tags>
-        <tag>渲染</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Shader笔记——完整光照</title>
     <url>/2022/05/02/Render/CommonShader/</url>
-    <content><![CDATA[<h3 id="Shader入门里的完整光照"><a href="#Shader入门里的完整光照" class="headerlink" title="Shader入门里的完整光照"></a>Shader入门里的完整光照</h3><pre><code class="shader">// Upgrade NOTE: replaced &#39;_Object2World&#39; with &#39;unity_ObjectToWorld&#39;
+    <content><![CDATA[<p>这篇文章里，写了《UnityShader入门精要》初·中·级篇中，主要的完整光照模型的实现</p>
+<span id="more"></span>
+
+<h3 id="Shader入门里的完整光照"><a href="#Shader入门里的完整光照" class="headerlink" title="Shader入门里的完整光照"></a>Shader入门里的完整光照</h3><pre><code class="shader">// Upgrade NOTE: replaced &#39;_Object2World&#39; with &#39;unity_ObjectToWorld&#39;
 // Upgrade NOTE: replaced &#39;mul(UNITY_MATRIX_MVP,*)&#39; with &#39;UnityObjectToClipPos(*)&#39;
 
 Shader &quot;Unity Shaders Book/Common/Bumped Specular&quot; &#123;
@@ -368,9 +234,163 @@ Shader &quot;Unity Shaders Book/Common/Bumped Specular&quot; &#123;
       </tags>
   </entry>
   <entry>
+    <title>Shader笔记——中级</title>
+    <url>/2022/05/02/Render/Shader_Note_Intermediate/</url>
+    <content><![CDATA[<p>《UnityShader入门精要》中级篇–笔记</p>
+<span id="more"></span>
+
+<h3 id="Light-Attenuation-光照衰减"><a href="#Light-Attenuation-光照衰减" class="headerlink" title="Light Attenuation 光照衰减"></a>Light Attenuation 光照衰减</h3><pre><code class="shader">// 确保光照衰减/阴影等被正确赋值
+#pragma multi_compile_fwdbase   // ForwardBase
+#pragma multi_compile_fwdadd    // ForwardAdd
+
+在ForwardAdd 中设置 
+Blend One One
+
+// Attenuation 衰减计算
+#ifdef USING_DIRECTIONAL_LIGHT
+    fixed atten = 1.0;
+#else
+    #if defined (POINT)
+        float3 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1)).xyz;
+        fixed atten = tex2D(_LightTexture0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
+    #elif defined (SPOT)
+        float4 lightCoord = mul(unity_WorldToLight, float4(i.worldPos, 1.0));
+        fixed atten =   (lightCoord.z &gt; 0) * 
+                        tex2D(_LightTexture0, lightCoord.xy / lightCoord.w + 0.5).w * 
+                        tex2D(_LightTextureB0, dot(lightCoord, lightCoord).rr).UNITY_ATTEN_CHANNEL;
+    #else
+        fixed atten = 1.0; 
+    #endif
+
+    // 或者自己算
+    // float distance = length(_WorldSpaceLightPos0.xyz - i.worldPos);
+    // fixed atten = 1.0 / distance;
+#endif
+
+return fixed4(ambient + (diffuse + specular) * atten, 1.0);
+
+// unity_WorldToLight 来源
+=&gt; AutoLight.cginc
+</code></pre>
+<h3 id="Shadow-Caster-投射阴影"><a href="#Shadow-Caster-投射阴影" class="headerlink" title="Shadow Caster 投射阴影"></a>Shadow Caster 投射阴影</h3><pre><code class="shader">Pass
+&#123;
+    Name &quot;Shadow Caster&quot;
+    Tags
+    &#123;
+        &quot;LightMode&quot; = &quot;ShadowCaster&quot;
+    &#125;
+
+    CGPROGRAM
+    #pragma multi_compile_shadowcaster
+    #pragma vertex vert
+    #pragma fragment frag
+    #include &quot;UnityCG.cginc&quot;
+
+    struct v2f
+    &#123;
+        V2F_SHADOW_CASTER;
+    &#125;;
+
+    v2f vert(appdata_base v)
+    &#123;
+        v2f o;
+        TRANSFER_SHADOW_CASTER_NORMALOFFSET(o);
+        return o;
+    &#125;
+
+    float4 frag(v2f i) : SV_Target
+    &#123;
+        SHADOW_CASTER_FRAGMENT(i);
+    &#125;
+    ENDCG
+&#125;
+
+// 单独做一个Material也是可以的，只是提示这样会消耗更多性能
+// 建议在一个Shader中使用多Pass实现
+// 更加建议使用Fallback实现
+</code></pre>
+<h3 id="Shadow-Receiver-阴影接收"><a href="#Shadow-Receiver-阴影接收" class="headerlink" title="Shadow Receiver 阴影接收"></a>Shadow Receiver 阴影接收</h3><pre><code class="shader">// 在对应的地方加上代码即可
+
+struct v2f
+&#123;
+    SHADOW_COORDS(0) // 参数是下一个可用插值寄存器的索引值
+&#125;;
+
+v2f vert(a2v v)
+&#123;
+    v2f ret;
+    TRANSFER_SHADOW(ret);
+    return ret;
+&#125;
+
+fixed4 frag(v2f i) : SV_Target
+&#123;
+    // Shadow Receiver
+    fixed shadow = SHADOW_ATTENUATION(i);
+
+    return fixed4(ambient + (diffuse + specular) * atten * shadow, 1.0);
+&#125;
+</code></pre>
+<h3 id="同时包含光照-衰减-和-阴影-接收的宏"><a href="#同时包含光照-衰减-和-阴影-接收的宏" class="headerlink" title="同时包含光照 衰减 和 阴影 接收的宏"></a>同时包含光照 衰减 和 阴影 接收的宏</h3><pre><code class="shader">UNITY_LIGHT_ATTENUATION(atten, v2f i, float3 worldPos)
+
+这个方式非常简单的同时实现了光照衰减和接收阴影 
+atten 同时包含两者
+
+// 来源
+=&gt; AutoLight.cginc
+</code></pre>
+<h3 id="导致阴影很糊的一种可能"><a href="#导致阴影很糊的一种可能" class="headerlink" title="导致阴影很糊的一种可能"></a>导致阴影很糊的一种可能</h3><pre><code class="shader">Quality Settings =&gt; Shadow Projection
+Stable Fit糊 Close Fit不糊 
+</code></pre>
+<h3 id="CubeMap-的采样与使用"><a href="#CubeMap-的采样与使用" class="headerlink" title="CubeMap 的采样与使用"></a>CubeMap 的采样与使用</h3><pre><code class="shader">texCUBE(_CubeMap, fixed3 cubeViewDir)
+
+反射 的使用 与 采样
+viewReflection = reflect(-worldViewDir, worldNormal);
+fixed3 reflectColor = texCUBE(_CubeMap, viewReflection).rgb * _ReflectionColor.rgb;
+
+折射 的使用 与 采样
+viewRefraction = refract(-noramlize(worldViewDir), normalize(ret.worldNormal), _RefractionRatio);
+fixed3 refractionColor = texCUBE(_CubeMap, viewRefraction).rgb * _RefractionColor.rgb;
+</code></pre>
+<h3 id="GrabPass"><a href="#GrabPass" class="headerlink" title="GrabPass"></a>GrabPass</h3><pre><code class="shader">在SubShader中
+GrabPass &#123; &quot;_RefractionTex&quot; &#125;
+下一个Pass，将会的到屏幕截图，如果多个Shader.Pass中的GrabPass贴图名字相同则复用
+贴图名字是_RefractionTex;
+
+使用（抓取屏幕，制作玻璃效果）
+sampler2D _RefractionTex;
+float4 _RefractionTex_TexelSize;
+
+screenPos = ComputeGrabScreenPos(clipPos);  // =&gt; UnityCG.cginc
+
+float2 offset = bump.xy * _Distortion * _RefractionTex_TexelSize.xy;
+iscreenPos.xy = offset * i.screenPos.z + screenPos.xy;  // 扰动量
+fixed3 refractColor = tex2D(_RefractionTex, screenPos.xy / screenPos.w).rgb;    // 透视除法
+</code></pre>
+<h3 id="Time"><a href="#Time" class="headerlink" title="Time"></a>Time</h3><pre><code class="shader">float4 _Time
+t 是自该场景开始所经过的事件，(t/20,t,2t,3t)
+</code></pre>
+<h3 id="frac函数"><a href="#frac函数" class="headerlink" title="frac函数"></a>frac函数</h3><pre><code class="shader">// 取小数部分
+float frac(float v)
+&#123;
+    return v - floor(v);
+&#125;
+</code></pre>
+]]></content>
+      <categories>
+        <category>UnityShader入门学习笔记</category>
+      </categories>
+      <tags>
+        <tag>渲染</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Shader笔记——初级</title>
     <url>/2022/05/01/Render/Shader_Note_Primary/</url>
-    <content><![CDATA[<h3 id="Properties-属性"><a href="#Properties-属性" class="headerlink" title="Properties 属性"></a>Properties 属性</h3><pre><code class="shader">Properties
+    <content><![CDATA[<p>《UnityShader入门精要》初级篇–笔记</p>
+<span id="more"></span>
+
+<h3 id="Properties-属性"><a href="#Properties-属性" class="headerlink" title="Properties 属性"></a>Properties 属性</h3><pre><code class="shader">Properties
 &#123;
     // 颜色值 (fixed4)
     _MyColor(&quot;MyColor&quot;, Color) = (1,1,1,1)
@@ -415,6 +435,8 @@ Fragment 的返回值为 fixed4 : SV_Target
     &quot;IgnoreProjector&quot; = &quot;True&quot;
     // RenderType 用于着色器替换功能
     &quot;RenderType&quot; = &quot;TransparentCutout&quot;
+    // 禁用合批
+    &quot;DisableBatching&quot; = &quot;True&quot;
 &#125;
 </code></pre>
 <h3 id="mul操作"><a href="#mul操作" class="headerlink" title="mul操作"></a>mul操作</h3><pre><code class="shader">mul(M, v) == mul(v, tranpose(M));
