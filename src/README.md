@@ -21,6 +21,11 @@ projects:
     link: https://github.com/Goatman1996/GameEvent
 
   - icon: fa-brands fa-unity
+    name: Dynamic For Unity
+    desc: Dynamic For Unity，为Unity实现了dynamic能力
+    link: https://github.com/Goatman1996/DynamicForUnity
+
+  - icon: fa-brands fa-unity
     name: InspectorDrawer
     desc: Inspector增强工具(仿Odin)(实现中...)
     link: https://github.com/Goatman1996/InspectorDrawer

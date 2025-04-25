@@ -1,7 +1,7 @@
 ---
-title: 计算机图形学
+title: 文章
 index: false
-icon: laptop-code
+icon: book
 article: false
 ---
 

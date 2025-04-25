@@ -4,7 +4,7 @@ export default sidebar({
   "/": [
     "",
     {
-      text: "图形学",
+      text: "计算机图形学",
       icon: "laptop-code",
       prefix: "ComputerGraphics/",
       link: "ComputerGraphics/",
@@ -14,6 +14,7 @@ export default sidebar({
       text: "文章",
       icon: "book",
       prefix: "posts/",
+      link: "posts/",
       children: "structure",
     },
     // "intro",
