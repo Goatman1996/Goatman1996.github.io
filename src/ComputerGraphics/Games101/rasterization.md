@@ -3,6 +3,8 @@ title: 光栅化
 icon: pen-to-square
 date: 2025-05-08
 isOriginal: true
+category:
+  - 图形学
 ---
 
 <!-- more -->

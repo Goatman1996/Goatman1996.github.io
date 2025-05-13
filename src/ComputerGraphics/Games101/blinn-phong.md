@@ -3,6 +3,8 @@ title: Blinn-Phong 光照模型
 icon: pen-to-square
 date: 2025-05-09
 isOriginal: true
+category:
+  - 图形学
 ---
 
 <!-- more -->

@@ -3,6 +3,8 @@ title: 终点
 icon: pen-to-square
 date: 2025-04-27
 isOriginal: true
+category:
+  - 杂记
 ---
 
 <!-- more -->

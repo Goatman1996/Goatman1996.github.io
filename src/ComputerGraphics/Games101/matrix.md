@@ -3,6 +3,8 @@ title: 矩阵
 icon: pen-to-square
 date: 2024-03-27
 isOriginal: true
+category:
+  - 图形学
 ---
 
 <!-- more -->

@@ -3,6 +3,8 @@ title: 基础变换
 icon: pen-to-square
 date: 2024-03-29
 isOriginal: true
+category:
+  - 图形学
 ---
 
 <!-- more -->

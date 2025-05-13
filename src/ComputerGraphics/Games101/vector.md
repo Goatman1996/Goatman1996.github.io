@@ -3,6 +3,8 @@ title: 向量
 icon: pen-to-square
 date: 2024-03-23
 isOriginal: true
+category:
+  - 图形学
 ---
 
 <!-- more -->
@@ -103,6 +105,8 @@ $\therefore \vec{a}\cdot\vec{b} = \vec{b} 在 \vec{a} 方向上的投影 * ||\ve
 
 ## 向量乘法_叉乘
 
+叉乘是三维和七维空间特有的
+
 ### 几何意义
 
 ![示例](./vector/CrossProduct.png)
@@ -116,6 +120,9 @@ $||\vec{c}|| = ||\vec{a}|| ||\vec{b}|| sin\phi$
 还可以通过$\vec{c}$的方向，$\vec{b}$在$\vec{a}$ 的左侧或右侧
 
 向量叉乘的结果，是一个向量
+
+对于二维向量而言，两个向量叉乘的结果的模，等于这两个向量构建出来的平行四边形的面积  
+计算方式，是将z=0，再代入三维计算
 
 ### 左/右手坐标系
 
@@ -141,9 +148,19 @@ $\vec{a}\times(k\vec{b})=k(\vec{a}\times\vec{b})$
 $$
 \vec{a}\times\vec{b} = 
 \begin{pmatrix}
-    y_a z_b - y_b z_a \\ 
+    y_a z_b - z_a y_b \\ 
     z_a x_b - x_a z_b \\ 
     x_a y_b - y_a x_b
 \end{pmatrix}
 $$
-- 后续会有矩阵形式的运算方法，代数计算可以不做记忆
+
+
+- 记忆方法，交叉相乘（仔细观察）
+$\vec{a}\times\vec{b} = \vec{c}$
+$$
+\begin{bmatrix}
+    x_c & y_c & z_c \\
+    x_a & y_a & z_a \\
+    x_b & y_b & z_b
+\end{bmatrix}
+$$ 
