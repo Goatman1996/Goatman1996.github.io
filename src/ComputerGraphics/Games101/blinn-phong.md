@@ -19,7 +19,7 @@ $r$ : 光源到物体的距离
 
 ## Specular Highlight (高光)
 
-$K_s$ : 镜面反射系数  
+$K_s$ : 镜面反射颜色  
 $p$ : 高光指数(shininess)
 
 ### Phong Reflection Model
@@ -66,7 +66,7 @@ Blinn-Phong 的 半程向量 相比于 Phong 的 镜面反射向量 要好算得
 
 ## Diffuse Reflection (漫反射)
 
-$K_d$ : 漫反射系数  
+$K_d$ : 漫反射颜色  
 
 $$
 lambertian_{diffuse} = K_d(I/r^2)max(0,\hat{n}·\hat{l})
@@ -76,7 +76,7 @@ $$
 
 ## Ambient Lighting (环境光)
 
-$K_a$ : 环境光系数  
+$K_a$ : 环境光颜色  
 $I_a$ : 环境光强度
 
 环境光在现实世界中，是非常复杂的  

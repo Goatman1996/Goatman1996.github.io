@@ -3,6 +3,8 @@ title: 我要
 icon: pen-to-square
 date: 2025-05-27
 isOriginal: true
+sticky: true
+star: true
 category:
   - 杂记
 ---
