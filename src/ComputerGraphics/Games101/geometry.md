@@ -49,7 +49,7 @@ category:
 
 ## Subdivision 细分
 
-简单举例一种简单的细分算法
+举例一种简单的细分算法
 
 - Loop Subdivision
 - 1，增加三角形，在原三角形三条边取中点，连线，构建4个新的三角形
@@ -65,8 +65,11 @@ category:
 简单举例一种简单的简化算法
 
 - Edge Collapse 边坍缩
-- Quadric Error Metric 二次误差度量
+![Mesh Collapse](./geometry/MeshCollapse.png)
+- Quadric Error Metric 二次误差度量（实现细节略）
+![Quadric Error Metric](./geometry/QuadricErrorMetrics.png)
 - 取二次度量误差最小的边，进行坍缩，而后更新所有影响的边，重复操作
+
 
 
 ## 总结
