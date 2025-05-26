@@ -1,7 +1,7 @@
 ---
 title: 贴图采样
 icon: pen-to-square
-date: 2025-05-14
+date: 2025-05-23
 isOriginal: true
 category:
   - 图形学
