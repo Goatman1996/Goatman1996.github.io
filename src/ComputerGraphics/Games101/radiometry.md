@@ -9,4 +9,40 @@ category:
 
 <!-- more -->
 
-## Title
+## 光的定义
+
+光的属性
+- Radiant flux 辐射通量
+- Radiant Intensity 辐射强度
+- Irradiance 辐照度
+- Radiance 辐射亮度
+
+### Radiant Energy and Flux (Power)
+
+- Radiant Energy 辐射能量  
+  符号$Q$ 表示能量、热量  
+  单位 $J = Joule$  
+  描述了能量的大小
+
+- Radiant Flux 辐射通量  
+  符号$\Phi$ 表示通量、流量、功率，$\Phi = \frac{dQ}{dt}$  
+  单位 $W = Watt$，  
+  *在光学中也被称为流明(光通量)$lm = lumen$  
+  描述了单位时间消耗、释放的能量
+
+### Radiant Intensity 
+
+Power per unit **solid angle** emitted by a point light source  
+*对于一个点光源而言，单位**立体角**内释放的能量  
+*对于一个均匀辐射的点光源而言，单位"方向"上释放的能量
+
+$$I = \frac{d\Phi}{d\Omega}$$
+- $\Omega$ 立体角，单位：$sr = steradian$  
+  二维的，圆拥有$2\pi$个 *弧度(radian)，$rad = 弧长/半径$  
+  三维的，球拥有$4\pi$个 *球面度(stradian)，$sr = 面积/半径^2$  
+
+- $I$ 单位：$W/sr = lm/steradian = cd = candela$(坎德拉)  
+
+- **举例**，对于一个均匀辐射的点光源而言
+$$I = \frac{\Phi}{4\pi} $$
+
