@@ -1,7 +1,7 @@
 ---
 title: 光线追踪
 icon: pen-to-square
-date: 2025-05-26
+date: 2025-05-28
 isOriginal: true
 category:
   - 图形学
@@ -9,9 +9,11 @@ category:
 
 <!-- more -->
 
-## 光线追踪
+## Whitted-Style Ray Tracing
 
-光线追踪算法，是以相机为原点，向屏幕中的每一个像素画一条射线  
+Whitted-Style 递归算法 
+
+是以相机为原点，向屏幕中的每一个像素画一条射线  
 射线打到物体上后，根据物体的特性，进行额外的反射或折射计算（代表射线可能会有多次弹射）  
 最终再射向光源，以确认光照性的一个过程  
 这个算法，利用了光路可逆性，以摄像机为起点，对每一个像素方向进行一个射线检测（模拟光路），以此来确定像素的颜色  
@@ -54,7 +56,9 @@ $$
 \vec{O} + t\vec{D} = (1-b_1-b_2)\vec{P_0} + b_1\vec{P_1} + b_2\vec{P_2}
 $$
 
-## 优化
+![Möller-Trumbore](./rayTracing/MTAlgorithm.png)
+
+## 加速
 
 单根射线遍历三角形的运算量过于巨大，可以通过构建包围盒来预剔除一些不可能与射线交互的物体
 
@@ -82,6 +86,20 @@ $$t_{enter} < t_{exit}\And\And t_{exit} >= 0$$
 
 ![AABB Intersection](./rayTracing/AABBIntersection.png)
 
+## 空间划分 Spatial Partitioning
 
+- Oct-Tree 八叉树
+- KD-Tree KD树
+- BSP-Tree BSP树
 
- 
+![Example](./rayTracing/SpatialPartitioningExamples.png)
+
+这个并不深究，因为这个算法已经过时了
+
+## 物体划分 Object Partitioning
+
+- BVH Bounding Volume Hierarchy 
+
+![BVH](./rayTracing/BVH.png)
+
+按照物体分堆,均匀的划分空间，形成可重叠的包围盒
