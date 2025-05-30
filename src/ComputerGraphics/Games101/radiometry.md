@@ -1,7 +1,7 @@
 ---
 title: 辐射度量学
 icon: pen-to-square
-date: 2025-05-29
+date: 2025-05-30
 isOriginal: true
 category:
   - 图形学
@@ -46,3 +46,25 @@ $$I = \frac{d\Phi}{d\Omega}$$
 - **举例**，对于一个均匀辐射的点光源而言
 $$I = \frac{\Phi}{4\pi} $$
 
+
+### Irradiance 
+
+Power per unit **area** emitted by a point light source  
+单位面积的辐射通量  
+
+$$E = \frac{d\Phi}{dA}$$
+
+- 单位：$W/m^2 = lm/m^2 = lux$
+- 面积的辐射通量，要求是与面垂直的辐射，所以是投影过的辐射通量  
+  概念与 Lambert Diffuse 的计算一致都是计算投影后的辐射通量
+
+### Radiance 
+
+Power per unit **solid angle** and **area** emitted by a point light source  
+单位立体角和面积的辐射通量
+$$L = \frac{d\Phi}{d\Omega dA}$$
+
+- 单位：$W/(sr·m^2) = lm/（sr·m^2） = nit$
+- 同样的，单位面积的辐射通量，要求是与面垂直的辐射，所以是投影过的辐射通量
+
+Radiance 同时可以等价于

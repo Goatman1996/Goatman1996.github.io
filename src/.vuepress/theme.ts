@@ -27,7 +27,7 @@ export default hopeTheme({
 
   // 侧边栏
   sidebar,
-  sidebarSorter: ["date"],
+  sidebarSorter: ["date-desc"],
 
   // 页脚
   footer: 'Drive by <a href="https://theme-hope.vuejs.press/zh/">[VuePress-Theme-Hope]</a>',
