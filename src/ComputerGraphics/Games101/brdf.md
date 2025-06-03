@@ -1,10 +1,11 @@
 ---
 title: BRDF
 icon: pen-to-square
-date: 2025-06-01
+date: 2025-06-03
 isOriginal: true
 category:
   - 图形学
+  - Games101
 ---
 
 <!-- more -->
@@ -65,3 +66,12 @@ Radiometry定义了光的各种属性，将光这一概念参数化，数据化�
 因为该点收到的光，可能是从别的物体辐射而来的光  
 所以这就涉及到了设定光的反射次数  
 假设光的反射次数是1的话，那该点所能接收到的光就只剩下光源了  
+
+
+## The Rendering Equation
+
+![Reflection Equation](./brdf/ReflectionEquation.png)
+
+而渲染方程，需要考虑子放光Emission，加上去即可
+
+![Rendering Equation](./brdf/RenderingEquation.png)

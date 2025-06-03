@@ -11,6 +11,13 @@ export default sidebar({
       children: "structure",
     },
     {
+      text: "数学",
+      icon: "infinity",
+      prefix: "Math/",
+      link: "Math/",
+      children: "structure",
+    },
+    {
       text: "文章",
       icon: "book",
       prefix: "posts/",
