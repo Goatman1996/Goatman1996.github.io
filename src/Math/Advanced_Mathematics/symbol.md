@@ -20,4 +20,4 @@ $\Bbb{R}$ 所有实数的集合
 $\Bbb{Z}$ 所有整数的集合  
 $\Bbb{N}$ 所有自然数的集合  
 $\Bbb{Q}$ 所有有理数的集合  
-$\Bbb{R} \setminus \Bbb{Q}$ 所有无理数的集合，
+$\Bbb{R} \setminus \Bbb{Q}$ 所有无理数的集合
