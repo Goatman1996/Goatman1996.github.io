@@ -34,6 +34,11 @@ export default hopeTheme({
   displayFooter: true,
   copyright: 'Copyright © 2024 <a href="https://github.com/Goatman1996">Goatman</a>',
 
+  lastUpdated: true,
+  contributors: false,
+  editLink: false,
+  changelog: false,
+
   // 博客相关
   blog: {
     description: "Unity前端开发",
