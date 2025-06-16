@@ -22,5 +22,7 @@ $\Bbb{N}$ 所有自然数的集合
 $\Bbb{Q}$ 所有有理数的集合  
 $\Bbb{R} \setminus \Bbb{Q}$ 所有无理数的集合  
 $\epsilon$ Epsilon  
-$[a]$ 对a向下取整
+$[a]$ 对a向下取整  
+$\delta$ Delta  
+$U(\delta)\mathring{U}(\delta)$ 分别表示$\delta$邻域 和 去心$\delta$邻域 
 
