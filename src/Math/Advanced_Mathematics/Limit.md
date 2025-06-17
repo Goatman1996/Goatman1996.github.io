@@ -1,7 +1,7 @@
 ---
 title: 极限
 icon: pen-to-square
-date: 2025-06-16
+date: 2025-06-13
 isOriginal: true
 category:
   - 数学

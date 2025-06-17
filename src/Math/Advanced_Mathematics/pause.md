@@ -1,7 +1,7 @@
 ---
 title: 暂停
 icon: pen-to-square
-date: 2025-06-17
+date: 2025-06-16
 isOriginal: true
 category:
   - 数学
