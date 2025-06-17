@@ -5,7 +5,7 @@ date: 2025-06-10
 isOriginal: true
 category:
   - 数学
-  - 高等数学
+  - 国内高等数学
 ---
 
 <!-- more -->
