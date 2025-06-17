@@ -33,8 +33,8 @@ $$\lim_{x \to x_0}f(x) = f(x_0)$$
 
 ## 连续与求导的关系
 
-* 可导一定连续
-  如果 $f(x)$于$x_0$处可导，则$f(x)$于$x_0$处一定连续
+* 可导一定连续  
+  如果 $f(x)$于$x_0$处可导，则$f(x)$于$x_0$处一定连续  
   证明如下：  
   $\because f'(x_0) = \lim_{x \to x_0} \frac{f(x) - f(x_0)}{x - x_0}$  
   $\therefore \lim_{x \to x_0}[f(x) - f(x_0)] = \lim_{x \to x_0} \frac{f(x) - f(x_0)}{x - x_0} \cdot (x - x_0)$  
@@ -42,11 +42,11 @@ $$\lim_{x \to x_0}f(x) = f(x_0)$$
   $\therefore \lim_{x \to x_0}[f(x) - f(x_0)] = 0$  
   $\therefore \lim_{x \to x_0}f(x) = f(x_0)$   
 
-* 连续不一定可导
-  证明如下：（反证法）  
+* 连续不一定可导  
+  证明如下：（反证法）    
   有$f(x) = |x|$  
   $\lim_{x \to 0}f(x) = 0$ (连续)  
-  $\lim_{x \to 0^+}\frac{f(x) - f(0)}{x - 0}  = 1$ (右导数)  
-  $\lim_{x \to 0^-}\frac{f(x) - f(0)}{x - 0}  = -1$ (左导数)  
+  $\lim_{x \to 0^+}f'(x) = 1$ (右导数)  
+  $\lim_{x \to 0^-}f'(x) = -1$ (左导数)  
   $左导数 \neq 右导数$  
   
