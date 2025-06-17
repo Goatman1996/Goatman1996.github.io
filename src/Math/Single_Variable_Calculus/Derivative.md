@@ -24,6 +24,8 @@ Derivative
 
 $$f^\prime(x_0) = \lim_{\Delta x \to 0} \frac{f(x_0 + \Delta x) - f(x_0)}{\Delta x}$$
 
+* 左导数=右导数=存在，即导数存在
+
 ### 记号
 
 变化量：$y = f(x),\Delta y = \Delta f$  
@@ -34,3 +36,9 @@ $$f^\prime(x_0) = \lim_{\Delta x \to 0} \frac{f(x_0 + \Delta x) - f(x_0)}{\Delta
 ## 幂函数的导数
 
 $$\frac{d}{dy}x^n = nx^{n-1}$$
+
+## 特别的定理
+
+对一个可求导的奇函数求导，导函数一定是偶函数  
+对一个可求导的偶函数求导，导函数一定是奇函数  
+* 可求导：处处可求导
