@@ -26,8 +26,12 @@ $\cos(a+b) = \cos a \cos b - \sin a \sin b$
 
 ## 求导运算法则
 
-* 乘法法则  
+* 加法
+  $(u+v)' = u' + v'$
+* 常数乘法  
+  $(cu)' = cu'$,c 为常数  
+* 乘法  
   $(uv)' = u'v + uv'$  
-* 除法法则  
+* 除法  
   $(\frac{u}{v})' = \frac{u'v - uv'}{v^2},v \neq 0$
 
