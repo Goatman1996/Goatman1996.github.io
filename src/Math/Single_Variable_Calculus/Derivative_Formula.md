@@ -1,7 +1,7 @@
 ---
 title: 求导公式
 icon: pen-to-square
-date: 2025-06-17 02:00:00
+date: 2025-06-19 00:00:00
 isOriginal: true
 category:
   - 数学
