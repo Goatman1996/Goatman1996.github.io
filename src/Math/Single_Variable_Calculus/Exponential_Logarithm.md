@@ -68,3 +68,29 @@ $u' = \ln a \cdot u$
 $$(a^x)' = \ln a \cdot a^x$$
 
 
+## 尝试求特殊函数
+
+对数微分法，对于求指数函数的导数很有用
+
+$v = x^x$  
+$\ln v = x \ln x$  
+$(\ln v)' = \ln x + x \cdot \frac{1}{x}$  
+$(\ln v)' = \ln x + 1$  
+$\frac{v'}{v} = \ln x + 1$  
+$v' = v(\ln + 1)$  
+$v' = x^x (\ln x + 1)$
+
+## 找出e
+
+$\lim_{n \to \infty} (1 + \frac{1}{n})^n$
+
+把他变成对数形式
+
+$\ln((1+\frac{1}{n})^n)$  
+$= n\ln (1 + \frac{1}{n})$  
+$= \frac{1}{\Delta x}\ln (1+\Delta x)$ ,令 $\Delta x = \frac{1}{n}$   
+$= \frac{1}{\Delta x} \ln(1+\Delta x) - \ln 1$, ($\ln 1 = 0)$  
+当$n \to \infty (\Delta x \to 0)$时,等同于求导  
+$\frac{d}{dx}\ln x|_{x=1} = \frac{1}{x} = 1$  
+注意这是对数的形式，所以原式子的结果是  
+$\lim_{n \to \infty} (1 + \frac{1}{n})^n = e$
