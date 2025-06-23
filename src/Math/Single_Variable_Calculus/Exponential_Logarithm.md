@@ -46,6 +46,8 @@ $$\frac{d}{dx} \ln x = \frac{1}{x}$$
 
 ### 方法一
 
+换底为$e$
+
 $\frac{d}{dx} a^x$  
 $\because a^x = e^{x \ln a}$  
 设$u = x \ln a$  
@@ -53,19 +55,25 @@ $\frac{d}{dx} e^{x \ln a} = (\frac{d}{dx} e^u) \cdot (\frac{d}{dx} x \ln a)$
 $\frac{d}{dx} e^{x \ln a} = \ln a e^{x \ln a}$  
 $$\frac{d}{dx} a^x = \ln a \cdot a^x$$  
 
+对带有指数的函数进行求导，可以讲底数转为$e$，今儿更好的求导  
+==链式法则==，很容易对$e^x$，进行求导，而后对于指数部分也会变简单
+
 ### 方法二
 
 对数微分法  
 有函数$u$，就有函数$\ln u$  
-$(\ln u)' = \frac{1}{u} u'$
+$$(\ln u)' = \frac{1}{u} u'$$
 
-令$u = a^x$  
+所以，令$u = a^x$  
 $\ln u = \ln a^x = x \ln a$
 
 $(\ln u)' = \ln a$  
 $\ln a = \frac{u'}{u}$  
 $u' = \ln a \cdot u$  
 $$(a^x)' = \ln a \cdot a^x$$
+
+对数微分法，是给带有指数的函数，取其对数后在进行微分  
+然后代入对数微分法的公式，从而进行==隐函数微分法==
 
 
 ## 尝试求特殊函数
