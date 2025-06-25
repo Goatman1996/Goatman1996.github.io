@@ -55,7 +55,7 @@ $\frac{d}{dx} e^{x \ln a} = (\frac{d}{dx} e^u) \cdot (\frac{d}{dx} x \ln a)$
 $\frac{d}{dx} e^{x \ln a} = \ln a e^{x \ln a}$  
 $$\frac{d}{dx} a^x = \ln a \cdot a^x$$  
 
-对带有指数的函数进行求导，可以讲底数转为$e$，今儿更好的求导  
+对带有指数的函数进行求导，可以将底数转为$e$，进而更好的求导  
 ==链式法则==，很容易对$e^x$，进行求导，而后对于指数部分也会变简单
 
 ### 方法二
