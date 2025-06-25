@@ -1,7 +1,7 @@
 ---
 title: 不满
 icon: pen-to-square
-date: 2025-06-25
+date: 2025-06-25 00:00:00
 isOriginal: true
 category:
   - 杂记
