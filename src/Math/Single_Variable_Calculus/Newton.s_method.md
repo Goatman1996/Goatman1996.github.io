@@ -1,7 +1,7 @@
 ---
 title: 牛顿迭代法
 icon: pen-to-square
-date: 2025-06-30 00:00:00
+date: 2025-07-03 00:00:00
 isOriginal: true
 category:
   - 数学
@@ -35,3 +35,11 @@ $x_2 = \frac{3}{4} + \frac{2}{3} = \frac{17}{12} = 1.4166666666666667$
 $x_3 = \frac{17}{24} + \frac{12}{17} = \frac{577}{408} = 1.41421568627$
 
 很快就能算出$\sqrt{2}$了
+
+## 中值定理
+
+Mean Value Theorem - MVT
+
+$$\frac{f(b) - f(a)}{b - a} = f'(c)$$
+$$f(b) = f(a) + f'(c)(b-a)$$ 
+$$c \in (a,b),f(x) \text{ is continuous on } [a,b],f'(x) \text{ is differentiable on } [a,b]$$
