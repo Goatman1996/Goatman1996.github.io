@@ -1,5 +1,5 @@
 ---
-title: 微分的应用
+title: 求导的应用
 icon: pen-to-square
 date: 2025-06-25 01:00:00
 isOriginal: true
