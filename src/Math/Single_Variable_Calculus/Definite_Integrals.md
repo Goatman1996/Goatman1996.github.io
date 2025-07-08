@@ -17,10 +17,10 @@ category:
 写作$\int_a^b f(x)dx$
 
 ## 黎曼和 与 黎曼积分
-Rieman Sum  
+Riemann Sum  
 黎曼和是求定积分近似值的常用方法  
 
-Rieman Integral  
+Riemann Integral  
 黎曼积分是求定积分的准确值  
 
 黎曼积分是在数学上严格定义了定积分的计算方式
