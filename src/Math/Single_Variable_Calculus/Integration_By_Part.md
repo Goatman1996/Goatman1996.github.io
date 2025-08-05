@@ -1,7 +1,7 @@
 ---
 title: 分部积分
 icon: pen-to-square
-date: 2025-07-31 00:00:00
+date: 2025-08-05 00:00:00
 isOriginal: true
 category:
   - 数学
