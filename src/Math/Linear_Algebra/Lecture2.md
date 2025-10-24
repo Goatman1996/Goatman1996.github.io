@@ -53,7 +53,7 @@ $$
 
 ### 解析
 * 第一步，$row_2-3row_1$ 等价于
-$$\begin{bmatrix}
+$$E_{21}=\begin{bmatrix}
     1&0&0\\-3&1&0\\0&0&1
 \end{bmatrix}
 \begin{bmatrix}
@@ -66,7 +66,7 @@ $$\begin{bmatrix}
 可联系上节提到的右乘进行理解
 
 * 第二步：$row_3-2row_2$ 等价于
-$$\begin{bmatrix}
+$$E_{32}=\begin{bmatrix}
     1&0&0\\0&1&0\\0&-2&1
 \end{bmatrix}
 \begin{bmatrix}
@@ -78,9 +78,9 @@ $$\begin{bmatrix}
 
 ### 整合结果
 
-$$M_{step2}M_{step1}A = EA = u$$
+$$E_{32}E_{21}A = EA = u$$
 $A$ 为原矩阵，$E$为消元矩阵，$u$ 为结果矩阵，即
-$$E = M_{step2}M_{step1} = 
+$$E = E_{32}E_{21} = 
 \begin{bmatrix}
     1&0&0\\0&1&0\\0&-2&1
 \end{bmatrix}
@@ -91,3 +91,45 @@ $$E = M_{step2}M_{step1} =
     1&0&0\\-3&1&0\\6&-2&1
 \end{bmatrix}
 $$
+
+### 计算方程解
+
+$Ax=b$  
+$EA = u$  
+$EAx = Eb$  
+$ux = Eb$
+
+$$
+E = \begin{bmatrix}
+    1&0&0\\-3&1&0\\6&-2&1
+    \end{bmatrix};
+b = \begin{bmatrix}
+    2\\12\\2
+    \end{bmatrix};
+Eb = \begin{bmatrix}
+    2\\6\\-10
+    \end{bmatrix}
+$$
+
+$$
+u = \begin{bmatrix}
+    1&2&1\\0&2&-2\\0&0&5
+    \end{bmatrix}
+$$
+
+解$ux = Eb$
+$$
+\begin{bmatrix}
+    1&2&1\\0&2&-2\\0&0&5
+    \end{bmatrix}
+\begin{bmatrix}
+    x\\y\\z
+    \end{bmatrix} = 
+\begin{bmatrix}
+    2\\6\\-10
+    \end{bmatrix}
+$$
+
+$$x = 2;y = 1;z = -2$$
+
+带回方程验证正确，以上就是高斯消元解方程组的全过程
