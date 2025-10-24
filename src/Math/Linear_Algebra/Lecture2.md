@@ -10,7 +10,9 @@ category:
 
 <!-- more -->
 
-## 矩阵消元
+## 高斯消元
+
+Gaussian Elimination 高斯消元
 
 矩阵的消元，即解方程组  
 
@@ -133,3 +135,41 @@ $$
 $$x = 2;y = 1;z = -2$$
 
 带回方程验证正确，以上就是高斯消元解方程组的全过程
+
+## 增广消元
+
+Augmented matrix 增广矩阵
+
+构造一个增广矩阵
+
+$$
+\left[
+    \begin{array}{c|c}
+        A & b
+    \end{array}
+\right] = 
+\left[
+    \begin{array}{ccc|c}
+        1 & 2 & 1 & 2 \\
+        3 & 8 & 1 & 12 \\
+        0 & 4 & 1 & 2
+    \end{array}
+\right] 
+\begin{CD}
+    @>\large{E}>>  
+\end{CD}  
+\left[
+    \begin{array}{ccc|c}
+        1 & 2 & 1 & 2 \\
+        0 & 2 & -1 & 6 \\
+        0 & 0 & 5 & -10
+    \end{array}
+\right] =
+\left[
+    \begin{array}{c|c}
+        EAx & Eb
+    \end{array}
+\right]
+$$
+
+即可计算结果
