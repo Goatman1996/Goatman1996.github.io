@@ -46,7 +46,7 @@ L = \begin{bmatrix}
 \end{bmatrix}
 $$
 
-完成$LU$分解后，举例求$x = \begin{bmatrix}1\\1\\2\end{bmatrix}$  
+完成$LU$分解后，举例求$b = \begin{bmatrix}1\\1\\2\end{bmatrix}$  
 $$
 Ly = b 
 \to
