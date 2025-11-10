@@ -1,7 +1,7 @@
 ---
 title: 矩阵空间，图等
 icon: pen-to-square
-date: 2025-10-30 00:00:00
+date: 2025-11-10 00:00:00
 isOriginal: true
 category:
   - 数学
