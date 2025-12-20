@@ -47,3 +47,20 @@ $$f(x,y) = x^3y + y^2$$
 
 $$\frac{\partial f}{\partial x} = 3x^2y + 0$$
 $$\frac{\partial f}{\partial y} = x^3 + 2y$$
+
+## 近平面
+
+求：$f(x,y) = x^2+y^2$ 的切平面
+
+切平面为，$\frac{\partial f}{\partial x}$和$\frac{\partial f}{\partial y}$所形成的平面
+
+$\frac{\partial f}{\partial x} = 2x$ 且 $\frac{\partial f}{\partial y} = 2y$
+
+则$f(x,y)$于点$(x_0,y_0)$处的近平面为：
+$$z= z_0 + \frac{\partial f}{\partial x}(x - x_0) + \frac{\partial f}{\partial y}(y - y_0)$$
+
+下图为$(0.1, 0.2)$处的切平面可视化
+
+![img](./Res/近平面.png  "[近平面演示](https://www.desmos.com/3d/fgvwabrvlg)")
+
+<!-- [近平面演示](https://www.desmos.com/3d/fgvwabrvlg) -->
