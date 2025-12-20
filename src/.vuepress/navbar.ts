@@ -2,51 +2,28 @@ import { navbar } from "vuepress-theme-hope";
 
 export default navbar([
   "/",
-  // "/demo/",
-  // {
-  //   text: "博文",
-  //   icon: "pen-to-square",
-  //   prefix: "/posts/",
-  //   children: [
-  //     {
-  //       text: "苹果",
-  //       icon: "pen-to-square",
-  //       prefix: "apple/",
-  //       children: [
-  //         { text: "苹果1", icon: "pen-to-square", link: "1" },
-  //         { text: "苹果2", icon: "pen-to-square", link: "2" },
-  //         "3",
-  //         "4",
-  //       ],
-  //     },
-  //     {
-  //       text: "香蕉",
-  //       icon: "pen-to-square",
-  //       prefix: "banana/",
-  //       children: [
-  //         {
-  //           text: "香蕉 1",
-  //           icon: "pen-to-square",
-  //           link: "1",
-  //         },
-  //         {
-  //           text: "香蕉 2",
-  //           icon: "pen-to-square",
-  //           link: "2",
-  //         },
-  //         "3",
-  //         "4",
-  //       ],
-  //     },
-  //     { text: "樱桃", icon: "pen-to-square", link: "cherry" },
-  //     { text: "火龙果", icon: "pen-to-square", link: "dragonfruit" },
-  //     "tomato",
-  //     "strawberry",
-  //   ],
-  // },
-  // {
-  //   text: "V2 文档",
-  //   icon: "book",
-  //   link: "https://theme-hope.vuejs.press/zh/",
-  // },
+  {
+    text: "数学",
+    icon: "infinity",
+    prefix: "Math/",
+    children: [
+      { text: "单变量微积分", icon: "infinity", link: "Single_Variable_Calculus/" },
+      { text: "线性代数", icon: "infinity", link: "Linear_Algebra/" },
+      { text: "多变量微积分", icon: "infinity", link: "Multivariable_Calculus/" },
+    ],
+  },
+    {
+    text: "计算机图形学",
+    icon: "laptop-code",
+    prefix: "ComputerGraphics/",
+    children: [
+      { text: "Games101", icon: "laptop-code", link: "Games101/" },
+      { text: "Games202", icon: "laptop-code", link: "Games202/" },
+    ],
+  },
+  {
+    text: "实践",
+    icon: "question",
+    link: "Implementations/",
+  },
 ]);
