@@ -734,3 +734,9 @@ PBR嘛，可以修改的部分其实并不多。各个引擎都有自己的实�
 达成成就：【人手一个的渲染器】
 
 ![OpenGM](./OpenGM_v0.0.1.png "OpenGM渲染器，大多设计都是抄的Unity哈哈哈")
+
+[Real Shading in Unreal Engine 4](https://blog.selfshadow.com/publications/s2013-shading-course/karis/s2013_pbs_epic_notes_v2.pdf)
+
+[Learn Open GL-PBR](https://learnopengl.com/PBR/Theory)
+
+[Microfacet Models for Refraction through Rough Surfaces](https://www.graphics.cornell.edu/~bjw/microfacetbsdf.pdf)
