@@ -1,7 +1,7 @@
 ---
 title: PBR
 icon: pen-to-square
-date: 2025-12-29 01:00:00
+date: 2026-01-04 00:00:00
 isOriginal: true
 category:
   - 实践
@@ -19,12 +19,14 @@ Physically Based Rendering 基于物理的渲染
 
 但是，我不会。不会就是不会，不会就老老实实地实践一遍。
 
-本文不算是教程，并不能完美地讲解所有PBR相关的细节（太菜了），更难以还原PBR的发展历史。本文仅旨在记录一次实践，一次理论到工程的实践，当作2025年的学习总结吧。
+本文不算是教程，并不能完美地讲解所有PBR相关的细节（太菜了），更难以还原PBR的发展历史。本文仅旨在记录一次实践，一次理论到工程的实践，且尽可能地解释理论部分，但不包含任何随处可见的理论解释图例（不想做搬运工）。
 
-PBR需要的前置知识包括但不限于：微积分，立体角，辐射度量学，能量守恒
+本文当作2025年的学习总结吧。
+
+PBR需要的前置知识包括但不限于：微积分，立体角，辐射度量学，能量守恒，微表面理论
 
 ## PBR背景
-远古时期的图形学渲染领域，人们使用Lambert，Half-Lambert漫反射，Phong，Blinn-Phong的高光等渲染模型进行渲染，当时的美术们通过各种物理意义不明的魔法参数对渲染结果进行调整，这是一种模糊的调整材质的方式，所以有了那句名言。
+远古时期的图形学渲染领域，人们使用Lambert，Half-Lambert漫反射，Phong，Blinn-Phong的高光等渲染模型进行渲染，当时的美术们通过各种物理意义不明的魔法参数对渲染结果进行调整，这是一种模糊的调整材质的方式，所以也应证了那句名言。
 $$\text{If it looks right, it's right.}$$  
 但是这可无法满足人们的需求，于是人们不禁发问：如何让物体渲染得更加真实？  
 而为了回答这个问题，图形学开始了漫长的征程。  
@@ -78,7 +80,7 @@ $$ L_o(p,w_o) =\int_{\Omega} (k_d\frac{c}{\pi} + k_s\frac{DFG}{4(n \cdot w_o)(n 
 
 直接光是确定入射方向的，所以积分过程退化成了离散的若干个确定方向的直接光的累加。  
 例如对于单个直接光而言，积分退化成了一个方向的“累加”（除光源方向外，其他所有方向贡献的能量为0）
-$$ L_o(p,w_o) = (k_d\frac{c}{\pi} + k_s\frac{DFG}{4(n \cdot w_o)(n \cdot w_i)}) L_i(p,w_i) (n \cdot w_i)\text{d}w_i$$
+$$ L_o(p,w_o) = (k_d\frac{c}{\pi} + k_s\frac{DFG}{4(n \cdot w_o)(n \cdot w_i)}) L_i(p,w_i) (n \cdot w_i)$$
 
 先简单过一下两个系数，在能量守恒的前提要求下：$k_s + k_d=1$，目前仅需要知道这个即可。
 
@@ -89,7 +91,8 @@ $$ L_o(p,w_o) = (k_d\frac{c}{\pi} + k_s\frac{DFG}{4(n \cdot w_o)(n \cdot w_i)}) 
 漫反射是不吸收任何能量的，均匀地向半球的所有方向发散的。  
 假设半球领域所有方向而来的入射光是一样的。则有
 
-$L_o = L_i$所有方向入射光都相同，且漫反射不吸收，则同样相等于所有方向的出射光。
+$L_o = L_i$  
+所有方向入射光都相同，且漫反射不吸收能量，则同样相等于所有方向的出射光。
 
 $$L_o = \int_{\Omega} f_r L_i (n \cdot w_i)\text{d}w_i$$  
 $$L_o = \underbrace{f_r L_i}_{常数项} \int_{\Omega} \cos \theta \text{d}w_i$$
@@ -97,7 +100,7 @@ $$L_o = f_r L_i \underbrace{\int_{0}^{2\pi}\int_{0}^{\frac{\pi}{2}} \cos \theta 
 
 计算内层积分，令$u = \sin \theta$，$\text{d}u = \cos \theta \text{d}\theta$，积分范围变成$u(0) = 0,u(\frac{\pi}{2}) = 1$，有
 
-$\int_{0}^{2\pi}\text{d} \phi \int_{0}^{1}u\text{d}u = 2\pi \frac{1}{2} = \pi$
+$$\int_{0}^{2\pi}\text{d} \phi \int_{0}^{1}u\text{d}u = 2\pi \frac{1}{2} = \pi$$
 
 // 这个积分计算是整个PBR实现流程中，唯一有解析解的积分了，且算且珍惜，后面都是妖魔鬼怪。
 
@@ -232,7 +235,7 @@ Blinn-Phong是使用Halfway Vector(半程向量)与Normal点乘进行高光强�
 
 每一种都各有特点，而且还有一些（没写出来）算法支持各向异性。各向异性指微观下的平面，具有一定的纹路走势，在高光上呈现出一定的规则，比如圆圈，横/竖条纹高光等，适于布料/头发/不锈钢锅碗瓢盆等渲染。
 
-本文是【LearnOpenGL】的，【LearnOpenGL】是基于【Real Shading in Unreal Engine 4】的，那么Unreal选了哪个函数呢？！  
+本文是基于【LearnOpenGL】的，【LearnOpenGL】是基于【Real Shading in Unreal Engine 4】的，那么Unreal选了哪个函数呢？！  
 
 Unreal：“我不造啊，我抄迪斯尼的，迪斯尼选的那个好，高光的“尾巴”长，我家的美术肯定喜欢。计算消耗比Blinn-Phong还低，我家的程序肯定喜欢。GGX/Trowbridge-Reitz，决定就是你啦！”
 
@@ -298,7 +301,7 @@ $$F(h,v,F_0) = F_0 + (1 - F_0)(1- (h \cdot v))^5$$
 
 为了解决这个问题，本需要使用额外的菲涅耳方程来进行计算。但是有一些近似的方法，可以同时解决两种情况。
 
-1. 金属材质的反射率带有颜色，则将$F_0$设定为一个 vec3 颜色值，且从Albedo中获取
+1. 金属材质的反射率带有颜色，则将$F_0$设定为一个 vec3 颜色值，且从Albedo中获取（Albedo就是反射率的意思）
 2. 非金属通常反射率很低很低，且不带颜色，所以使用一个常值0.04代替
 
 结合以上两点，我们可以得到，根据金属度，在0.04 ～ Albedo之间进行插值:
@@ -539,7 +542,7 @@ $n_1 \cdot n_2$为迭代次数
 
 个人认为，上述的结果才是真正意义上的Irradiance。但是为了节省性能，实际实现中，还会将$\frac{1}{\pi}$也放到预积分时处理，即：
 
-$$ L_o(p,w_o) \approx c \cdot k_d \cdot (\frac{1}{\pi} \frac{\pi^2}{n_1n_2} \sum_{i=1}^{n_1} \sum_{j=1}^{n_2} L_i(\phi_i,\theta_j)  \cos \theta_j \sin \theta_j )$$
+$$ L_o(p,w_o) \approx c \cdot k_d \cdot \frac{1}{\pi} \cdot (\frac{\pi^2}{n_1n_2} \sum_{i=1}^{n_1} \sum_{j=1}^{n_2} L_i(\phi_i,\theta_j)  \cos \theta_j \sin \theta_j )$$
 
 $$ L_o(p,w_o) \approx c \cdot k_d \cdot \underbrace{(\frac{\pi}{n_1n_2} \sum_{i=1}^{n_1} \sum_{j=1}^{n_2} L_i(\phi_i,\theta_j)  \cos \theta_j \sin \theta_j )}_{预积分部分}$$
 
@@ -637,9 +640,9 @@ $$L_o = \int_{\Omega} L_i \text{d}w_i \cdot \int_{\Omega} f_r \cdot (n \cdot w_i
 这个方法叫`分割求和近似法`，总之它看起来是对的。  
 该效果之所以说看起来是对的，肯定是经过大量的比较得到的。现在基于IBL的实时镜面反射，大多是如此实现的。
 
-追求尽可能的推导，感觉越来越写不下去了。算了！开摆！
-
 $$L_o = \underbrace{\int_{\Omega} L_i \text{d}w_i}_{\text{Prefilter}} \cdot \underbrace{\int_{\Omega} f_r \cdot (n \cdot w_i) \text{d}w_i}_{LUT}$$
+
+追求尽可能的推导，感觉越来越写不下去了。算了！开摆！
 
 ### 第一部分 Prefilter Map
 
