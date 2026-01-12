@@ -1,7 +1,7 @@
 ---
-title: 最值，最小二乘
+title: 最值，最小二乘，最值验证
 icon: pen-to-square
-date: 2025-12-20 01:00:00
+date: 2026-01-12 00:00:00
 isOriginal: true
 category:
   - 数学
@@ -80,3 +80,47 @@ $$D(a,b,c) = \sum_{i=1}^n (y_i - (ax_i^2 + bx_i + c))^2$$
 
 <font color=##00aa00>// 线性代数课程中，亦有最小二乘解法</font>
 [线性代数的最小二乘](../Linear_Algebra/Lecture14_15_16.md)
+
+## 最值的二阶验证
+
+### 二阶导
+
+$f(x,y)$的一阶偏导：
+$$\frac{\partial f}{\partial x} = f_{x}$$ 
+$$\frac{\partial f}{\partial y} = f_{y}$$
+
+$f(x,y)$的二阶偏导：
+$$\frac{\partial^2 f}{\partial x^2} = f_{xx}$$
+
+$$\frac{\partial^2 f}{\partial x \partial y} = \frac{\partial^2 f}{\partial y \partial x} = f_{xy} = f_{yx}$$
+
+$$\frac{\partial^2 f}{\partial y^2} = f_{yy}$$
+
+### 最值类型判断
+
+设$f(x,y)$有临界点$(x_0.y_0)$
+
+设$A = f_{xx}$，$B = f_{xy}$，$C = f_{yy}$
+
+1. $AC - B^2 > 0$ 且 $A > 0$为局部最小值点
+2. $AC - B^2 > 0$ 且 $A < 0$为局部最大值点
+3. $AC - B^2 < 0$为鞍点
+4. $AC - B^2 = 0$为不确定
+
+### 例：
+
+有$f(x,y) = x + y + \frac{1}{xy}$($x,y>0$)
+
+一阶偏导确定临界点:  
+$f_x = 1 - \frac{1}{x^2y} = 0$  
+$f_y = 1 - \frac{1}{xy^2} = 0$
+
+解方程组得：$x = 1,y = 1$。即$(1,1)$处为$f(x,y)$的临界点
+
+二阶偏导确定类型：  
+$f_{xx} = \frac{2}{x^3y}$临界点为$A = 2$  
+$f_{xy} = \frac{1}{x^2y^2}$临界点为$B = 1$  
+$f_{yy} = \frac{2}{xy^3}$临界点为$C = 2$  
+
+
+有$AC-B^2 = 4 - 1 = 3 > 0$，$A > 0$，故为临界点$(1,1)$局部最小值点
