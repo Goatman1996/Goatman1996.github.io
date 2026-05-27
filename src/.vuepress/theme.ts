@@ -110,6 +110,7 @@ export default hopeTheme({
     mark: true,
     sub: true,
     sup: true,
+    markmap: true,
     stylize: [
         {
           matcher: "Recommended",
