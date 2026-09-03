@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blinn-Phong Head · Three.js</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #1a1a2e;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+    }
+
+    #info {
+      position: absolute;
+      bottom: 8px;
+      width: 100%;
+      text-align: center;
+      color: #888;
+      font-family: system-ui, sans-serif;
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    #status {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      color: #c7c9d9;
+      font-family: system-ui, sans-serif;
+      font-size: 14px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="status">正在加载 BlenderHead.fbx…</div>
+  <div id="info">🖱️ 拖拽旋转 · 滚轮缩放 · 右键平移</div>
+
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+  <script type="module" src="./js/RS_001_BlinnPhong.js"></script>
+</body>
+
+</html>
